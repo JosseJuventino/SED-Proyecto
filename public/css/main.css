@@ -1,0 +1,71 @@
+@font-face {
+  font-family: "Fredoka";
+  src: url("./fonts/fredoka.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+.container {
+  background-color: #ffd700;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+nav a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: black;
+}
+.buttons a {
+  text-decoration: none;
+  color: black;
+  margin-left: 10px;
+}
+.buttons a:last-child {
+  background-color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+}
+.hero h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+.hero p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #333;
+}
+.image-section {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  bottom: 0px;
+  gap: 20px;
+}
+.image-section img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(60px);
+}
