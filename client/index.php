@@ -11,14 +11,12 @@
         <div class="flex flex-col justify-center items-center">
             <h1 class="text-2xl z-10">BetApp login</h1>
             <form class="flex flex-col z-10 items-center my-5 gap-5" method="POST" action="your-login-endpoint.php">
-                <!-- Input para Usuario -->
                 <input
                     type="text"
                     class="bg-gray-900 px-5 py-2 outline-none rounded-lg"
                     placeholder="Usuario"
                     name="username"
                 />
-                <!-- Input para Contraseña -->
                 <div class="relative w-full">
                     <input
                         id="password"
@@ -35,19 +33,16 @@
                         <img id="eyeIcon" src="./public/images/eye.svg" alt="Mostrar contraseña" class="h-6 w-6">
                     </button>
                 </div>
-                <!-- Enlace para registro -->
                 <p class="gap-2 flex flex-row">¿No tienes una aún?
-                    <a href="/register" class="text-blue-700">Crea una</a>
+                    <a href="./src/register.php" class="text-blue-700">Crea una</a>
                 </p>
-                <!-- Botón para enviar -->
                 <button class="bg-gray-900 px-5 py-2 rounded-lg" type="submit">Iniciar sesión</button>
             </form>
-            <!-- Imagen de fondo -->
             <div class="absolute opacity-15 bottom-0">
                 <img src="./public/images/background.png" alt="Background" />
             </div>
         </div>
     </main>
-    <script src="./src/js/showPassword.js"></script>
+    <script src="./public/js/showPassword.js"></script>
 </body>
 </html>
