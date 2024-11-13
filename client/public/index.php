@@ -1,36 +1,52 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mercadito uca</title>   
-    <link rel="stylesheet" href="css/main.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/tailwind.css">
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1 class="logo">Mercadito uca</h1>
-            <nav>
-                <a href="#">Ser emprendedor</a>
-                <a href="#">Sobre nosotros</a>
-                <a href="#">Negocios</a>
-            </nav>
-            <div class="buttons">
-                <a href="#">Iniciar Sesión</a>
-                <a href="#">Registrarse</a>
+<body class="bg-black text-white h-screen flex justify-center items-center">
+        <main className="flex flex-col justify-center h-screen">
+            <div class="flex flex-col justify-center items-center">
+                <h1 class="text-2xl z-10">BetApp login</h1>
+                <form class="flex flex-col z-10 items-center my-5 gap-5" method="POST" action="your-login-endpoint.php">
+                    <!-- Input para Usuario -->
+                    <input
+                        type="text"
+                        class="bg-gray-900 px-5 py-2 outline-none rounded-lg"
+                        placeholder="Usuario"
+                        name="username"
+                    />
+                    <!-- Input para Contraseña -->
+                    <div class="relative w-full">
+                        <input
+                            type="password"
+                            class="bg-gray-900 px-5 py-2 outline-none rounded-lg"
+                            placeholder="Contraseña"
+                            name="password"
+                        />
+                        <button
+                            type="button"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-700"
+                        >
+                            <span>Mostrar/Ocultar</span>
+                        </button>
+                    </div>
+                    <!-- Enlace para registro -->
+                    <p class="gap-2 flex flex-row">¿No tienes una aún?
+                        <a href="/register" class="text-blue-700">Crea una</a>
+                    </p>
+                    <!-- Botón para enviar -->
+                    <button class="bg-gray-900 px-5 py-2 rounded-lg" type="submit">Iniciar sesión</button>
+                </form>
+                <!-- Imagen de fondo -->
+                <div class="absolute opacity-15 bottom-0">
+                    <img src="./images/background.png" alt="Background" />
+                </div>
             </div>
-        </header>
-        <section class="hero">
-            <h2>Bienvenidos a Nuestro Mercado</h2>
-            <p>Explora productos únicos de nuestros talentosos emprendedores. Únete a nuestra comunidad y disfruta de una experiencia de compra diferente, apoyando a pequeños negocios y proyectos apasionantes.</p>
-        </section>
-        <section class="image-section">
-            <img src="https://s.yimg.com/ny/api/res/1.2/v.f68LiPXMpBHylMgfrm6w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/es/tomatazos_56/e465e15bd5c67ae98920ef9d5c1e5e3b" alt="Anime Shop Logo">
-            <img src="https://s.yimg.com/ny/api/res/1.2/v.f68LiPXMpBHylMgfrm6w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/es/tomatazos_56/e465e15bd5c67ae98920ef9d5c1e5e3b" alt="Anime Shop Logo">
-            <img src="https://s.yimg.com/ny/api/res/1.2/v.f68LiPXMpBHylMgfrm6w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/es/tomatazos_56/e465e15bd5c67ae98920ef9d5c1e5e3b" alt="Anime Shop Logo">
-            <img src="https://s.yimg.com/ny/api/res/1.2/v.f68LiPXMpBHylMgfrm6w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/es/tomatazos_56/e465e15bd5c67ae98920ef9d5c1e5e3b" alt="Anime Shop Logo">
-            <img src="https://s.yimg.com/ny/api/res/1.2/v.f68LiPXMpBHylMgfrm6w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/es/tomatazos_56/e465e15bd5c67ae98920ef9d5c1e5e3b" alt="Anime Shop Logo">
-        </section>
+
+        </main>
     </div>
 </body>
 </html>
