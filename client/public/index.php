@@ -9,9 +9,8 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo">Mercadito uca</div>
+            <h1 class="logo">Mercadito uca</h1>
             <nav>
-                <a href="#">Inicio</a>
                 <a href="#">Ser emprendedor</a>
                 <a href="#">Sobre nosotros</a>
                 <a href="#">Negocios</a>
@@ -31,7 +30,6 @@
             <img src="https://s.yimg.com/ny/api/res/1.2/v.f68LiPXMpBHylMgfrm6w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/es/tomatazos_56/e465e15bd5c67ae98920ef9d5c1e5e3b" alt="Anime Shop Logo">
             <img src="https://s.yimg.com/ny/api/res/1.2/v.f68LiPXMpBHylMgfrm6w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/es/tomatazos_56/e465e15bd5c67ae98920ef9d5c1e5e3b" alt="Anime Shop Logo">
             <img src="https://s.yimg.com/ny/api/res/1.2/v.f68LiPXMpBHylMgfrm6w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/es/tomatazos_56/e465e15bd5c67ae98920ef9d5c1e5e3b" alt="Anime Shop Logo">
-
         </section>
     </div>
 </body>
