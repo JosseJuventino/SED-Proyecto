@@ -34,7 +34,7 @@
                     </button>
                 </div>
                 <p class="gap-2 flex flex-row">¿No tienes una aún?
-                    <a href="./src/register.php" class="text-blue-700">Crea una</a>
+                    <a href="./app/register.php" class="text-blue-700">Crea una</a>
                 </p>
                 <button class="bg-gray-900 px-5 py-2 rounded-lg" type="submit">Iniciar sesión</button>
             </form>

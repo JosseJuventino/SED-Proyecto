@@ -2,7 +2,8 @@ module.exports = {
   content: [
     "./public/**/*.html",
     "./*.php",
-    "./src/**/*.{html,js,php}", // Incluye tus archivos fuente (PHP, JS, etc.)
+    "./app/**/*.{html,js,php}",
+    "./components/**/*.{html,js,php}",
   ],
   theme: {
     extend: {},

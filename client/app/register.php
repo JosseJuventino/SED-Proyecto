@@ -57,10 +57,8 @@
                         <img id="eyeIcon" src="../public/images/eye.svg" alt="Mostrar contraseña" class="h-6 w-6">
                     </button>
                 </div>
-                <!-- Enlace para volver a iniciar sesión -->
-                <p class="gap-2 flex flex-row text-sm mt-4">
-                    ¿Ya tienes una cuenta?
-                    <a href="../index.php" class="text-blue-700 hover:underline">Inicia sesión</a>
+                <p class="gap-2 flex flex-row">¿Ya tienes una cuenta?
+                    <a href="../index.php" class="text-blue-700">Inicia sesión</a>
                 </p>
                 <button class="bg-gray-900 px-5 py-2 rounded-lg w-full" type="submit">Registrar</button>
             </form>
