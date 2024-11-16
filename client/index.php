@@ -10,7 +10,7 @@
     <main class="flex flex-col justify-center h-screen">
         <div class="flex flex-col justify-center items-center">
             <h1 class="text-2xl z-10">BetApp login</h1>
-            <form class="flex flex-col z-10 items-center my-5 gap-5" method="POST" action="your-login-endpoint.php">
+            <form class="flex flex-col z-10 items-center my-5 gap-5" method="POST" action="./app/loginHandler.php">
                 <input
                     type="text"
                     class="bg-gray-900 px-5 py-2 outline-none rounded-lg"
