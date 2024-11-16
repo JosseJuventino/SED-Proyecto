@@ -10,7 +10,6 @@
      <?php include '../../components/header.php'; ?>
 
      <?php
-        // JSON quemado
         $partido = [
             "idPartido" => 1,
             "idEquipoLocal" => 1,
@@ -30,6 +29,21 @@
             ]
         ];
     ?>
+
+            <?php
+        $proximosPartidos = [
+            [
+                "nombreEquipoLocal" => "Equipo A",
+                "nombreEquipoVisitante" => "Equipo B",
+                "fechaPartido" => "2024-11-22",
+            ],
+            [
+                "nombreEquipoLocal" => "Equipo C",
+                "nombreEquipoVisitante" => "Equipo D",
+                "fechaPartido" => "2024-11-23",
+            ],
+        ];
+        ?>
 
     <main class="flex flex-col lg:flex-row items-start my-5 gap-10">
         <div class="w-full">
@@ -75,6 +89,14 @@
                     </div>
                 </div>
             </div>
+
+            <h2 class="text-xl font-bold text-white mt-10">Partidos próximos</h2>
+            <div class="mt-5">
+                <?php foreach ($proximosPartidos as $partido): ?>
+                        <?php include '../../components/MatchCard.php'; ?>
+                <?php endforeach; ?>
+            </div>
+
         </div>
     </main>
 
@@ -114,6 +136,8 @@
             <button id="placeBet" class="bg-slate-700 w-full py-3 hover:bg-slate-600 transition-colors duration-200 rounded-xl">Apostar</button>
         </div>
     </div>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
