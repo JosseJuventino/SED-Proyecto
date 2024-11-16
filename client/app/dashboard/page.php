@@ -30,7 +30,7 @@
         ];
     ?>
 
-            <?php
+        <?php
         $proximosPartidos = [
             [
                 "nombreEquipoLocal" => "Equipo A",
@@ -92,7 +92,7 @@
 
             <h2 class="text-xl font-bold text-white mt-10">Partidos próximos</h2>
             <div class="mt-5">
-                <?php foreach ($proximosPartidos as $partido): ?>
+                <?php foreach ($proximosPartidos as $matches): ?>
                         <?php include '../../components/MatchCard.php'; ?>
                 <?php endforeach; ?>
             </div>
