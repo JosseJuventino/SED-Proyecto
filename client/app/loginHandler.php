@@ -1,23 +1,35 @@
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_start();
 
+    $errors = [];   // Array para almacenar los errores
     $username = htmlspecialchars(trim($_POST['username'] ?? ''), ENT_QUOTES, 'UTF-8');
     $password = htmlspecialchars(trim($_POST['password'] ?? ''), ENT_QUOTES, 'UTF-8');
 
 
 
     if (empty($username) || empty($password)) {
-        die("Por favor, completa todos los campos.");
+        $errors[] = "El nombre de usuario y la contraseña son obligatorios.";
     }
 
     if (!preg_match('/^[a-zA-Z0-9_\-]{3,50}$/', $username)) {
-        die("El nombre de usuario debe contener solo letras, números, guiones y tener entre 3 y 50 caracteres.");
+        $errors[] = "El nombre de usuario solo puede contener letras, números, guiones y guiones bajos.";
     }
 
     if (strlen($password) < 8) {
-        die("La contraseña debe tener al menos 8 caracteres.");
+        $errors[] = "La contraseña debe tener al menos 8 caracteres.";
     }
+
+
+    // Si hay errores, los guardamos en la sesión y redirigimos de vuelta al formulario
+    if (!empty($errors)) {
+        $_SESSION['errors'] = $errors;
+        $_SESSION['username'] = $username;  // Mantener el valor del nombre de usuario
+        header('Location: ../index.php');  // Redirigir de nuevo al formulario
+        exit;
+    }
+
 
 
     $postData = [
@@ -57,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verificar si la solicitud fue exitosa
     if ($response === false) {
         echo "Error en la solicitud.";
-        header('Location: ../index.php');
+        header('Location: ./dashboard/page.php');
         exit;
     }
     
@@ -70,11 +82,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ./dashboard/page.php');
         exit;
     } else {
-        echo "Error al iniciar sesión: " . ($responseData['message'] ?? 'Error desconocido');
+        $errors[] = "Error al iniciar sesión: " . ($responseData['message'] ?? 'Error desconocido');
+        $_SESSION['errors'] = $errors;
+        header('Location: ../index.php');
+        exit;
     }
 
 
 } else {
+    $_SESSION['error_message'] = "Error al iniciar sesión: " . ($responseData['message'] ?? 'Error desconocido');
     header('Location: ../index.php');
     exit;
 }
