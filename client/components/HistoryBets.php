@@ -25,9 +25,24 @@ $apuestaHistoryInfo = [
     ],
 ];
 
-// Filtrar apuestas activas y pasadas
-$activeBets = array_filter($apuestaHistoryInfo, fn($apuesta) => $apuesta['marcadorLocalFinal'] === null);
-$historicalBets = array_filter($apuestaHistoryInfo, fn($apuesta) => $apuesta['marcadorLocalFinal'] !== null);
+// Sanitización
+$apuestaHistoryInfo = array_map(function ($apuesta) {
+    return [
+        'idApuesta' => (int) $apuesta['idApuesta'],
+        'equipoLocal' => htmlspecialchars($apuesta['equipoLocal'], ENT_QUOTES, 'UTF-8'),
+        'equipoVisitante' => htmlspecialchars($apuesta['equipoVisitante'], ENT_QUOTES, 'UTF-8'),
+        'CantidadApostada' => (float) $apuesta['CantidadApostada'],
+        'prediccionEquipoLocal' => (int) $apuesta['prediccionEquipoLocal'],
+        'prediccionEquipoVisitante' => (int) $apuesta['prediccionEquipoVisitante'],
+        'marcadorLocalFinal' => isset($apuesta['marcadorLocalFinal']) ? (int) $apuesta['marcadorLocalFinal'] : null,
+        'marcadorVisitanteFinal' => isset($apuesta['marcadorVisitanteFinal']) ? (int) $apuesta['marcadorVisitanteFinal'] : null,
+        'fecha' => htmlspecialchars($apuesta['fecha'], ENT_QUOTES, 'UTF-8'),
+    ];
+}, $apuestaHistoryInfo);
+
+// Filtrar apuestas
+$activeBets = array_filter($apuestaHistoryInfo, fn($apuesta) => is_null($apuesta['marcadorLocalFinal']));
+$historicalBets = array_filter($apuestaHistoryInfo, fn($apuesta) => !is_null($apuesta['marcadorLocalFinal']));
 ?>
 
 <div class="py-5">
