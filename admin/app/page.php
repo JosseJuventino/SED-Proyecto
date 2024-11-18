@@ -25,6 +25,7 @@ $pageToInclude = array_key_exists($currentPage, $pages) && file_exists($pages[$c
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $currentPage === '404' ? '404 Not Found' : 'BetApp Admin'; ?></title>
     <link rel="stylesheet" href="../public/css/tailwind.css">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
 </head>
 <body class="bg-background text-foreground">
     <?php if ($currentPage === '404'): ?>
