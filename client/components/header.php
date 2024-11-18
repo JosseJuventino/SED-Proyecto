@@ -11,6 +11,7 @@
             <div class="flex flex-col items-center gap-5 sm:flex-row mt-10 sm:mt-0 text-xl">
                 <a href="/app/dashboard/page.php" class="hover:text-white font-bold">Inicio</a>
                 <a href="/app/dashboard/bets/page.php" class="hover:text-white font-bold">Gestionar apuestas</a>
+                <a href="/app/dashboard/teams/page.php" class="hover:text-white font-bold">Equipos</a>
                 <div class="bg-gray-900 py-2 px-10 gap-2 rounded-lg flex flex-row items-center">
                     <span class="material-icons">$ </span>
                     <span id="userPoints">10</span>
