@@ -7,7 +7,6 @@ $pages = [
     'users'     => 'pages/users.php',
     'teams'     => 'pages/teams.php',
     'bets'      => 'pages/bets.php',
-    'settings'  => 'pages/settings.php',
     '404'       => 'pages/404.php' // Ruta del archivo 404
 ];
 

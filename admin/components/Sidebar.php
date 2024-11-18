@@ -7,6 +7,5 @@
         <a href="?page=teams" class="block py-2 px-4 rounded hover:bg-secondary mb-2 <?php echo ($currentPage == 'teams') ? 'bg-secondary' : ''; ?>">Teams</a>
         <a href="?page=users" class="block py-2 px-4 rounded hover:bg-secondary mb-2 <?php echo ($currentPage == 'users') ? 'bg-secondary' : ''; ?>">Users</a>
         <a href="?page=bets" class="block py-2 px-4 rounded hover:bg-secondary mb-2 <?php echo ($currentPage == 'bets') ? 'bg-secondary' : ''; ?>">Bets</a>
-        <a href="?page=settings" class="block py-2 px-4 rounded hover:bg-secondary mb-2 <?php echo ($currentPage == 'settings') ? 'bg-secondary' : ''; ?>">Settings</a>
     </nav>
 </aside>
