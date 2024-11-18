@@ -1,4 +1,15 @@
-    document.addEventListener("DOMContentLoaded", () => {
+const matches = [
+    {
+        id: 1,
+        fechaPartido: "2024-11-14T06:00:00.000Z",
+        marcadorLocal: null,
+        marcadorVisitante: null,
+        equipoLocal: "Equipo Águilas",
+        equipoVisitante: "Equipo B"
+    }
+];    
+
+document.addEventListener("DOMContentLoaded", () => {
     const usersTableBody = document.getElementById('usersTableBody');
     const addUserModal = document.getElementById('addUserModal');
     const editUserModal = document.getElementById('editUserModal');
