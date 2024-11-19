@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +12,18 @@
     <main class="flex flex-col justify-center h-screen">
         <div class="flex flex-col justify-center items-center">
             <h1 class="text-2xl z-10">BetApp login</h1>
-            <form class="flex flex-col z-10 items-center my-5 gap-5" method="POST" action="your-login-endpoint.php">
+                        <!-- Mostrar los errores si existen -->
+                        <?php if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])): ?>
+                <div class="bg-red-500 text-white p-3 rounded-lg mb-4">
+                    <ul>
+                        <?php foreach ($_SESSION['errors'] as $error): ?>
+                            <li><?php echo $error; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php unset($_SESSION['errors']); ?>
+            <?php endif; ?>
+            <form class="flex flex-col z-10 items-center my-5 gap-5" method="POST" action="./app/loginHandler.php">
                 <input
                     type="text"
                     class="bg-gray-900 px-5 py-2 outline-none rounded-lg"
