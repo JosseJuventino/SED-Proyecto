@@ -44,13 +44,23 @@ $teams = array_map(function ($team) {
 <div class="max-w-6xl mx-auto space-y-8">
     <!-- Search Section -->
     <div class="flex gap-4 items-center">
-        <input type="text" placeholder="Search teams..."
-            class="flex-1 bg-[#1E293B] border-[#1E293B] text-white placeholder-[#94A3B8] p-3 rounded"
-            id="searchInput">
-        <button onclick="searchTeams()" class="bg-[#1E40AF] hover:bg-[#1E40AF]/90 text-white px-4 py-2 rounded flex items-center">
+    <form action="searchTeams.php" method="POST" class="flex gap-4 w-full">
+        <input 
+            type="text" 
+            name="searchTerm" 
+            placeholder="Search teams..." 
+            class="flex-1 bg-[#1E293B] border-[#1E293B] text-white placeholder-[#94A3B8] p-3 rounded" 
+            required
+        >
+        <button 
+            type="submit" 
+            class="bg-[#1E40AF] hover:bg-[#1E40AF]/90 text-white px-4 py-2 rounded flex items-center"
+        >
             Search
         </button>
-    </div>
+    </form>
+</div>
+
 
     <!-- Teams Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="teamsGrid">
