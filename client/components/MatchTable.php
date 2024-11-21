@@ -61,6 +61,29 @@
     ?>
 
     <div class="w-full">
+    <?php
+session_start(); // Asegurarse de iniciar la sesión para acceder a $_SESSION
+
+// Verificar si hay errores en la sesión
+if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])): ?>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Error:</strong>
+        <ul class="mt-2 ml-4 list-disc">
+            <?php foreach ($_SESSION['errors'] as $error): ?>
+                <li><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <button class="absolute top-0 bottom-0 right-0 px-4 py-3 text-red-700 focus:outline-none" 
+                onclick="this.parentElement.style.display='none';">
+            ✖
+        </button>
+    </div>
+    <?php 
+    // Limpiar los errores después de mostrarlos
+    unset($_SESSION['errors']); 
+    ?>
+<?php endif; ?>
+
         <h2 class="text-xl font-bold text-white">Partido actual</h2>
 
         <div class="mt-5">
@@ -129,6 +152,7 @@
 </div>
 
 <!-- Overlay and Pop-Up -->
+<form action="processBet.php" method="POST" class="mt-5">
 <div id="overlay" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 hidden"></div>
 <div id="popup"
     class="fixed top-1/2 z-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-8 rounded-xl hidden shadow-lg">
@@ -141,7 +165,7 @@
             <p class="font-bold"><?= $partido['equipoLocal']['nombre']; ?></p>
             <div
                 class="bg-slate-700 mt-5 h-14 w-14 border-4 rounded-xl border-slate-500 flex items-center justify-center">
-                <input type="number" id="predictionLocal" value="0"
+                <input type="number" id="predictionLocal" value="0" name="predictionLocal"
                     class="text-center font-bold text-[25px] bg-transparent text-white w-full h-full outline-none appearance-none">
             </div>
         </div>
@@ -155,7 +179,7 @@
             <p class="font-bold"><?= $partido['equipoVisitante']['nombre']; ?></p>
             <div
                 class="bg-slate-700 mt-5 h-14 w-14 border-4 rounded-xl border-slate-500 flex items-center justify-center">
-                <input type="number" id="predictionVisitante" value="0"
+                <input type="number" id="predictionVisitante" value="0" name="predictionVisitante"
                     class="text-center font-bold text-[25px] bg-transparent text-white w-full h-full outline-none appearance-none">
             </div>
         </div>
@@ -163,7 +187,7 @@
     <div class="flex flex-col items-start gap-1 mx-5 mt-5">
         <h2 class="font-bold">Cantidad a apostar:</h2>
         <div class="bg-slate-700 border-4 rounded-xl border-slate-500 flex items-center justify-center">
-            <input id="betQuantity" type="number"
+            <input id="betQuantity" type="number" name="betQuantity" 
                 class="px-4 font-bold text-[25px] bg-transparent text-white w-full h-full outline-none appearance-none"
                 placeholder="0">
         </div>
@@ -171,8 +195,11 @@
     <div class="flex flex-row w-full mt-5">
         <button id="placeBet"
             class="bg-slate-700 w-full py-3 hover:bg-slate-600 transition-colors duration-200 rounded-xl">Apostar</button>
-    </div>
+    
+        </div>
+
 </div>
+</form>
 
 
 <script src="/public/js/openPopupBet.js" defer></script>
