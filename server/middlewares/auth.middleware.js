@@ -7,11 +7,11 @@ const authMiddleware = async (req, res) => {
   const authHeader = req.headers["authorization"];
 
   if (!authHeader) {
-    res.writeHead(401, { "Content-Type": "application/json" });
+    res.writeHead(404, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
         success: false,
-        message: "Authorization header missing",
+        message: "Error",
       })
     );
     return false; // Detener la ejecución
@@ -19,11 +19,11 @@ const authMiddleware = async (req, res) => {
 
   const parts = authHeader.split(" ");
   if (parts.length !== 2 || parts[0] !== "Bearer") {
-    res.writeHead(401, { "Content-Type": "application/json" });
+    res.writeHead(404, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
         success: false,
-        message: "Invalid authorization format. Expected 'Bearer <token>'",
+        message: "Error",
       })
     );
     return false; // Detener la ejecución
@@ -37,14 +37,14 @@ const authMiddleware = async (req, res) => {
   } catch (error) {
     console.error("Error al verificar el token:", error);
 
-    let message = "Token inválido o no autenticado";
+    let message = "Error";
     if (error.code === "ERR_JWT_EXPIRED") {
-      message = "Token expirado";
+      message = "Error";
     } else if (error.code === "ERR_JWT_SIGNATURE_VERIFICATION_FAILED") {
-      message = "Firma del token inválida";
+      message = "Error";
     }
 
-    res.writeHead(401, { "Content-Type": "application/json" });
+    res.writeHead(404, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
         success: false,
