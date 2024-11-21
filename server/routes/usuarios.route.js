@@ -23,7 +23,8 @@ const usuariosRoutes = async (req, res) => {
       usuariosController.getById(req, res)
     );
   } else if (req.url === "/usuarios" && req.method === "POST") {
-    usuariosController.create(req, res); // Ruta pública, no requiere autenticación
+    // Ruta pública, no requiere autenticación
+    await usuariosController.create(req, res);
   } else if (req.url.match(/^\/usuarios\/\d+$/) && req.method === "PUT") {
     const id = req.url.split("/")[2];
     req.params = { id };

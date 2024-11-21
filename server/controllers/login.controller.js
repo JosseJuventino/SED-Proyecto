@@ -59,7 +59,7 @@ const loginController = {
         // Generar JWT
         const jwt = await new SignJWT({ id: user.idUsuario, email: user.email })
           .setProtectedHeader({ alg: "HS256" })
-          .setExpirationTime("2h")
+          .setExpirationTime("10m")
           .sign(Buffer.from(SECRET_KEY, "utf-8"));
 
         res.writeHead(200, { "Content-Type": "application/json" });

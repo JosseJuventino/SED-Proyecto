@@ -5,4 +5,6 @@ require("dotenv").config();
 
 const server = http.createServer(mainRouter);
 
-server.listen(process.env.PORT, () => {});
+server.listen(process.env.PORT, () => {
+  console.log(`Bienvenido a la API`);
+});
