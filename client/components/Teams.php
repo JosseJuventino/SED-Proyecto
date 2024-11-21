@@ -43,23 +43,41 @@ $teams = array_map(function ($team) {
 
 <div class="max-w-6xl mx-auto space-y-8">
     <!-- Search Section -->
+    <?php
+    // Verificar si hay errores en la sesión
+    if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])): ?>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Error:</strong>
+            <ul class="mt-2 ml-4 list-disc">
+                <?php foreach ($_SESSION['errors'] as $error): ?>
+                    <li><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <button class="absolute top-0 bottom-0 right-0 px-4 py-3 text-red-700 focus:outline-none"
+                onclick="this.parentElement.style.display='none';">
+                ✖
+            </button>
+        </div>
+        <?php
+        // Limpiar los errores después de mostrarlos
+        unset($_SESSION['errors']);
+        ?>
+    <?php endif; ?>
     <div class="flex gap-4 items-center">
-    <form action="searchTeams.php" method="POST" class="flex gap-4 w-full">
-        <input 
-            type="text" 
-            name="searchTerm" 
-            placeholder="Search teams..." 
-            class="flex-1 bg-[#1E293B] border-[#1E293B] text-white placeholder-[#94A3B8] p-3 rounded" 
-            required
-        >
-        <button 
-            type="submit" 
-            class="bg-[#1E40AF] hover:bg-[#1E40AF]/90 text-white px-4 py-2 rounded flex items-center"
-        >
-            Search
-        </button>
-    </form>
-</div>
+        <form action="searchTeams.php" method="POST" class="flex gap-4 w-full">
+            <input
+                type="text"
+                name="searchTerm"
+                placeholder="Search teams..."
+                class="flex-1 bg-[#1E293B] border-[#1E293B] text-white placeholder-[#94A3B8] p-3 rounded"
+                required>
+            <button
+                type="submit"
+                class="bg-[#1E40AF] hover:bg-[#1E40AF]/90 text-white px-4 py-2 rounded flex items-center">
+                Search
+            </button>
+        </form>
+    </div>
 
 
     <!-- Teams Grid -->
@@ -93,4 +111,3 @@ $teams = array_map(function ($team) {
         <?php endforeach; ?>
     </div>
 </div>
-
