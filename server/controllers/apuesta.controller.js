@@ -14,7 +14,7 @@ const apuestasController = {
         res.end(JSON.stringify(apuestas));
       }
     } catch (error) {
-      "Error al obtener las apuestas:", error;
+      console.error("Error al obtener las apuestas:", error);
       if (!res.headersSent) {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(
@@ -49,12 +49,50 @@ const apuestasController = {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(apuesta));
     } catch (error) {
-      "Error al obtener la apuesta:", error;
+      console.error("Error al obtener la apuesta:", error);
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
           success: false,
           error: "Error al obtener la apuesta",
+        })
+      );
+    }
+  },
+
+  getByUserId: async (req, res) => {
+    const userId = req.params.userId;
+
+    if (!isValidNumericId(userId)) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({ success: false, error: "ID de usuario inválido" })
+      );
+      return;
+    }
+
+    try {
+      const apuestas = await apuestasModel.getByUserId(userId);
+      if (apuestas.length === 0) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+            error: "No se encontraron apuestas para este usuario",
+          })
+        );
+        return;
+      }
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(apuestas));
+    } catch (error) {
+      console.error("Error al obtener las apuestas del usuario:", error);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({
+          success: false,
+          error: "Error al obtener las apuestas del usuario",
         })
       );
     }
@@ -105,6 +143,22 @@ const apuestasController = {
         return;
       }
 
+      if (
+        apuesta.golEquipoLocal == null ||
+        isNaN(apuesta.golEquipoLocal) ||
+        apuesta.golEquipoVisitante == null ||
+        isNaN(apuesta.golEquipoVisitante)
+      ) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+            error: "Los goles de los equipos son inválidos",
+          })
+        );
+        return;
+      }
+
       await apuestasModel.create(apuesta);
       res.writeHead(201, { "Content-Type": "application/json" });
       res.end(
@@ -114,7 +168,7 @@ const apuestasController = {
         })
       );
     } catch (error) {
-      "Error al crear la apuesta:", error;
+      console.error("Error al crear la apuesta:", error);
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -178,6 +232,31 @@ const apuestasController = {
         return;
       }
 
+      if (apuesta.golEquipoLocal != null && isNaN(apuesta.golEquipoLocal)) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+            error: "Los goles del equipo local son inválidos",
+          })
+        );
+        return;
+      }
+
+      if (
+        apuesta.golEquipoVisitante != null &&
+        isNaN(apuesta.golEquipoVisitante)
+      ) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+            error: "Los goles del equipo visitante son inválidos",
+          })
+        );
+        return;
+      }
+
       const updated = await apuestasModel.update(id, apuesta);
       if (!updated) {
         res.writeHead(404, { "Content-Type": "application/json" });
@@ -195,7 +274,7 @@ const apuestasController = {
         })
       );
     } catch (error) {
-      "Error al actualizar la apuesta:", error;
+      console.error("Error al actualizar la apuesta:", error);
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -233,7 +312,7 @@ const apuestasController = {
         })
       );
     } catch (error) {
-      "Error al eliminar la apuesta:", error;
+      console.error("Error al eliminar la apuesta:", error);
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({

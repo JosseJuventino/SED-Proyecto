@@ -11,8 +11,7 @@ const apuestasRoutes = async (req, res) => {
       }
       // Si no está autenticado, el middleware ya envió la respuesta
     } catch (error) {
-      // Manejo de errores inesperados (opcional)
-      "Error en applyAuthMiddleware:", error;
+      console.error("Error en applyAuthMiddleware:", error);
       if (!res.headersSent) {
         res.statusCode = 500;
         res.setHeader("Content-Type", "application/json");
@@ -28,6 +27,13 @@ const apuestasRoutes = async (req, res) => {
     const id = req.url.split("/")[2];
     req.params = { id };
     await applyAuthMiddleware(apuestasController.getById);
+  } else if (
+    req.url.match(/^\/apuesta\/usuario\/\d+$/) &&
+    req.method === "GET"
+  ) {
+    const userId = req.url.split("/")[3];
+    req.params = { userId };
+    await applyAuthMiddleware(apuestasController.getByUserId);
   } else if (req.url === "/apuesta" && req.method === "POST") {
     await applyAuthMiddleware(apuestasController.create);
   } else if (req.url.match(/^\/apuesta\/\d+$/) && req.method === "PUT") {
@@ -41,7 +47,12 @@ const apuestasRoutes = async (req, res) => {
   } else {
     // Ruta no encontrada
     res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Ruta no encontrada" }));
+    res.end(
+      JSON.stringify({
+        success: false,
+        message: "Error",
+      })
+    );
   }
 };
 
