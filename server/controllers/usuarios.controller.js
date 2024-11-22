@@ -4,62 +4,69 @@ const {
   isValidEmail,
   isValidText,
   isValidDUI,
+  isValidNumericId,
 } = require("../validators/usuario.validator");
 const parseBody = require("../utils/parseBody");
 
 const usuariosController = {
+  // Obtener todos los usuarios
   getAll: async (req, res) => {
     try {
-      const usuarios = await usuariosModel.getAll();
-      if (!res.headersSent) {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(usuarios));
-      }
-    } catch (error) {
-      "Error al obtener usuarios:", error;
-      if (!res.headersSent) {
-        res.writeHead(500, { "Content-Type": "application/json" });
+      const body = await parseBody(req);
+      const userId = body.userId;
+
+      if (!isValidNumericId(userId)) {
+        res.writeHead(400, { "Content-Type": "application/json" });
         res.end(
-          JSON.stringify({ success: false, error: "Error al obtener usuarios" })
+          JSON.stringify({ success: false, error: "ID de usuario inválido" })
         );
+        return;
       }
+
+      const usuarios = await usuariosModel.getAll(userId);
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(usuarios));
+    } catch (error) {
+      console.error("Error al obtener usuarios:");
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({ success: false, error: "Error al obtener usuarios" })
+      );
     }
   },
 
+  // Obtener usuario por ID
   getById: async (req, res) => {
-    const id = req.params.id;
+    try {
+      const body = await parseBody(req);
+      const superadminId = body.superadminId;
+      const userId = req.params.id;
 
-    if (!id) {
-      if (!res.headersSent) {
+      if (!isValidNumericId(superadminId) || !isValidNumericId(userId)) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ success: false, error: "ID inválido" }));
-      }
-      return;
-    }
-
-    try {
-      const usuario = await usuariosModel.getById(id);
-      if (!usuario) {
-        if (!res.headersSent) {
-          res.writeHead(404, { "Content-Type": "application/json" });
-          res.end(
-            JSON.stringify({ success: false, error: "Usuario no encontrado" })
-          );
-        }
         return;
       }
-      if (!res.headersSent) {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(usuario));
-      }
-    } catch (error) {
-      "Error al obtener usuario:", error;
-      if (!res.headersSent) {
-        res.writeHead(500, { "Content-Type": "application/json" });
+
+      const usuario = await usuariosModel.getById(superadminId, userId);
+
+      if (!usuario) {
+        res.writeHead(404, { "Content-Type": "application/json" });
         res.end(
-          JSON.stringify({ success: false, error: "Error al obtener usuario" })
+          JSON.stringify({ success: false, error: "Usuario no encontrado" })
         );
+        return;
       }
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(usuario));
+    } catch (error) {
+      console.error("Error al obtener usuario:");
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({ success: false, error: "Error al obtener usuario" })
+      );
     }
   },
 
@@ -105,6 +112,7 @@ const usuariosController = {
       );
     } catch (error) {
       "Error al crear usuario:", error;
+      console.error("Error al crear usuario:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({ success: false, error: "Error al crear usuario" })
@@ -112,49 +120,38 @@ const usuariosController = {
     }
   },
 
+  // Actualizar un usuario
   update: async (req, res) => {
-    const id = req.params.id;
-
-    if (!id) {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ success: false, error: "ID inválido" }));
-      return;
-    }
-
     try {
-      const usuario = await parseBody(req);
+      // Obtener el cuerpo de la solicitud
+      const body = await parseBody(req);
 
-      if (usuario.email && !isValidEmail(usuario.email)) {
+      // Extraer valores del cuerpo
+      const superadminId = body.superadminId;
+      const userId = req.params.id;
+
+      // Validaciones básicas
+      if (!isValidNumericId(superadminId) || !isValidNumericId(userId)) {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ success: false, error: "Email inválido" }));
+        res.end(JSON.stringify({ success: false, error: "ID inválido" }));
         return;
       }
 
-      if (!usuario.clave) {
+      if (!isValidEmail(body.email)) {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({ success: false, error: "Contraseña inválida" })
-        );
+        res.end(JSON.stringify({ success: false, error: "Correo inválido" }));
         return;
       }
 
-      if (usuario.nombreUsuario && !isValidText(usuario.nombreUsuario)) {
+      if (!body.nombreUsuario || !isValidText(body.nombreUsuario)) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ success: false, error: "Nombre inválido" }));
         return;
       }
 
-      if (usuario.dui && !isValidDUI(usuario.dui)) {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ success: false, error: "DUI inválido" }));
-        return;
-      }
+      // Llamar al modelo para realizar la actualización
+      const updated = await usuariosModel.update(superadminId, userId, body);
 
-      if (usuario.clave) {
-        usuario.clave = await bcrypt.hash(usuario.clave, 10);
-      }
-
-      const updated = await usuariosModel.update(id, usuario);
       if (!updated) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(
@@ -163,6 +160,7 @@ const usuariosController = {
         return;
       }
 
+      // Responder éxito
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -171,7 +169,7 @@ const usuariosController = {
         })
       );
     } catch (error) {
-      "Error al actualizar usuario:", error;
+      console.error("Error al actualizar usuario:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({ success: false, error: "Error al actualizar usuario" })
@@ -179,25 +177,35 @@ const usuariosController = {
     }
   },
 
+  // Eliminar un usuario
   delete: async (req, res) => {
-    const id = req.params.id;
-
-    if (!id) {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ success: false, error: "ID inválido" }));
-      return;
-    }
-
     try {
-      const deleted = await usuariosModel.delete(id);
+      const body = await parseBody(req);
+      const superadminId = body.superadminId; // ID del superadministrador
+      const userId = req.params.id; // ID del usuario a eliminar
+
+      // Validar IDs
+      if (!isValidNumericId(superadminId) || !isValidNumericId(userId)) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, error: "IDs inválidos" }));
+        return;
+      }
+
+      // Eliminar el usuario
+      const deleted = await usuariosModel.delete(superadminId, userId);
+
       if (!deleted) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(
-          JSON.stringify({ success: false, error: "Usuario no encontrado" })
+          JSON.stringify({
+            success: false,
+            error: "Usuario no encontrado o ya eliminado",
+          })
         );
         return;
       }
 
+      // Responder éxito
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -206,10 +214,13 @@ const usuariosController = {
         })
       );
     } catch (error) {
-      "Error al eliminar usuario:", error;
+      console.error("Error al eliminar usuario");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
-        JSON.stringify({ success: false, error: "Error al eliminar usuario" })
+        JSON.stringify({
+          success: false,
+          error: "Error al eliminar usuario",
+        })
       );
     }
   },

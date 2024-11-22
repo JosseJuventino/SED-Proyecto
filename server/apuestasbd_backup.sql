@@ -95,30 +95,6 @@ $$;
 ALTER FUNCTION public.crear_partido(user_id integer, fecha date, marcadorlocal integer, marcadorvisitante integer, idequipolocal integer, idequipovisitante integer) OWNER TO postgres;
 
 --
--- Name: create_apuesta(integer, numeric, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
---
-
-CREATE FUNCTION public.create_apuesta(usuarioid integer, cantidad numeric, estadoapuestaid integer, partidoid integer) RETURNS TABLE(idapuestas integer, idusuario integer, cantidadapostada numeric, fechaapuesta date, idestadoapuesta integer, idpartido integer)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RETURN QUERY
-    INSERT INTO apuestas (idusuario, cantidadapostada, idestadoapuesta, idpartido)
-    VALUES (usuarioId, cantidad, estadoApuestaId, partidoId)
-    RETURNING
-        apuestas.idapuestas AS idApuestas,
-        apuestas.idusuario AS idUsuario,
-        apuestas.cantidadapostada AS cantidadApostada,
-        apuestas.fechaapuesta AS fechaApuesta,
-        apuestas.idestadoapuesta AS idEstadoApuesta,
-        apuestas.idpartido AS idPartido;
-END;
-$$;
-
-
-ALTER FUNCTION public.create_apuesta(usuarioid integer, cantidad numeric, estadoapuestaid integer, partidoid integer) OWNER TO postgres;
-
---
 -- Name: create_apuesta(integer, numeric, integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -140,60 +116,73 @@ $$;
 ALTER FUNCTION public.create_apuesta(p_idusuario integer, p_cantidadapostada numeric, p_idestadoapuesta integer, p_idpartido integer, p_golequipolocal integer, p_golequipovisitante integer) OWNER TO postgres;
 
 --
--- Name: create_equipo(text, text, date); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: create_equipo(integer, character varying, character varying, date); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.create_equipo(nombre text, representante text, fecha date) RETURNS TABLE(idequipo integer, nombreequipo character varying, representanteequipo character varying, fechafundacion date)
+CREATE FUNCTION public.create_equipo(user_id integer, nombre_equipo character varying, representante_equipo character varying, fecha_fundacion date) RETURNS void
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
-    RETURN QUERY
+    -- Verificar si el usuario existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE idusuario = user_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
+
+    -- Obtener el rol del usuario
+    SELECT get_user_role(user_id) INTO user_role;
+
+    -- Validar que el usuario tenga el rol de superadmin
+    IF user_role != 'superadmin' THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Lógica para crear el equipo (tabla 'equipos')
     INSERT INTO equipos (nombreequipo, representanteequipo, fechafundacion)
-    VALUES (nombre, representante, COALESCE(fecha, CURRENT_DATE))
-    RETURNING
-        equipos.idequipo AS idEquipo,
-        equipos.nombreequipo AS nombreEquipo,
-        equipos.representanteequipo AS representanteEquipo,
-        equipos.fechafundacion AS fechaFundacion;
+    VALUES (nombre_equipo, representante_equipo, fecha_fundacion);
 END;
 $$;
 
 
-ALTER FUNCTION public.create_equipo(nombre text, representante text, fecha date) OWNER TO postgres;
+ALTER FUNCTION public.create_equipo(user_id integer, nombre_equipo character varying, representante_equipo character varying, fecha_fundacion date) OWNER TO postgres;
 
 --
--- Name: create_equipo(character varying, character varying, date); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: create_partido(integer, date, integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.create_equipo(nombre character varying, representante character varying, fecha date) RETURNS TABLE(idequipo integer, nombreequipo character varying, representanteequipo character varying, fechafundacion date)
+CREATE FUNCTION public.create_partido(user_id integer, param_fecha date, param_marcadorlocal integer, param_marcadorvisitante integer, param_equipolocalid integer, param_equipovisitanteid integer) RETURNS TABLE(idpartido integer, fechapartido date, marcadorlocal integer, marcadorvisitante integer, idequipolocal integer, idequipovisitante integer)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
-    RETURN QUERY
-    INSERT INTO equipos (nombreequipo, representanteequipo, fechafundacion)
-    VALUES (nombre, representante, COALESCE(fecha, CURRENT_DATE))
-    RETURNING
-        idequipo AS idEquipo,
-        nombreequipo AS nombreEquipo,
-        representanteequipo AS representanteEquipo,
-        fechafundacion AS fechaFundacion;
-END;
-$$;
+    -- Verificar si el usuario existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE idusuario = user_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
 
+    -- Obtener el rol del usuario
+    SELECT get_user_role(user_id) INTO user_role;
 
-ALTER FUNCTION public.create_equipo(nombre character varying, representante character varying, fecha date) OWNER TO postgres;
+    -- Validar que el usuario tenga el rol de admin o superadmin
+    IF user_role NOT IN ('admin', 'superadmin') THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
 
---
--- Name: create_partido(date, integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
---
+    -- Verificar si los equipos existen
+    IF NOT EXISTS (SELECT 1 FROM equipos WHERE idequipo = param_equipolocalid) THEN
+        RAISE EXCEPTION 'El equipo local con ID % no existe', param_equipolocalid;
+    END IF;
 
-CREATE FUNCTION public.create_partido(param_fecha date, param_marcadorlocal integer, param_marcadorvisitante integer, param_equipolocalid integer, param_equipovisitanteid integer) RETURNS TABLE(idpartido integer, fechapartido date, marcadorlocal integer, marcadorvisitante integer, idequipolocal integer, idequipovisitante integer)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
+    IF NOT EXISTS (SELECT 1 FROM equipos WHERE idequipo = param_equipovisitanteid) THEN
+        RAISE EXCEPTION 'El equipo visitante con ID % no existe', param_equipovisitanteid;
+    END IF;
+
+    -- Crear el partido
     RETURN QUERY
     INSERT INTO partido (fechapartido, marcadorlocal, marcadorvisitante, idequipolocal, idequipovisitante)
-    VALUES (param_fecha, param_marcadorLocal, param_marcadorVisitante, param_equipoLocalId, param_equipoVisitanteId)
+    VALUES (param_fecha, param_marcadorlocal, param_marcadorvisitante, param_equipolocalid, param_equipovisitanteid)
     RETURNING partido.idpartido AS idPartido, 
               partido.fechapartido AS fechaPartido, 
               partido.marcadorlocal AS marcadorLocal, 
@@ -204,43 +193,26 @@ END;
 $$;
 
 
-ALTER FUNCTION public.create_partido(param_fecha date, param_marcadorlocal integer, param_marcadorvisitante integer, param_equipolocalid integer, param_equipovisitanteid integer) OWNER TO postgres;
-
---
--- Name: create_user(text, text, text, text, text, text, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
---
-
-CREATE FUNCTION public.create_user(nombre text, apellido text, dui text, correo text, usuario text, clave text, rol integer, puntos integer DEFAULT 0) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, email character varying, username character varying, puntosuser integer, idrol integer)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RETURN QUERY
-    INSERT INTO Usuarios (nombreusuario, apellidousuario, dui, email, username, clave, puntosuser, idrol)
-    VALUES (nombre, apellido, dui, correo, usuario, clave, puntos, rol)
-    RETURNING Usuarios.idusuario AS idUsuario, 
-              Usuarios.nombreusuario AS nombreUsuario, 
-              Usuarios.apellidousuario AS apellidoUsuario, 
-              Usuarios.email AS email, 
-              Usuarios.username AS userName, 
-              Usuarios.puntosuser AS puntosUser, 
-              Usuarios.idrol AS idRol;
-END;
-$$;
-
-
-ALTER FUNCTION public.create_user(nombre text, apellido text, dui text, correo text, usuario text, clave text, rol integer, puntos integer) OWNER TO postgres;
+ALTER FUNCTION public.create_partido(user_id integer, param_fecha date, param_marcadorlocal integer, param_marcadorvisitante integer, param_equipolocalid integer, param_equipovisitanteid integer) OWNER TO postgres;
 
 --
 -- Name: create_user(character varying, character varying, character varying, character varying, character varying, character varying, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.create_user(nombre character varying, apellido character varying, dui character varying, correo character varying, usuario character varying, clave character varying, rol integer, puntos integer DEFAULT 0) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, email character varying, username character varying, puntosuser integer, idrol integer)
+CREATE FUNCTION public.create_user(nombre character varying, apellido character varying, dui character varying, correo character varying, usuario character varying, clave character varying, rol integer, puntos integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, email character varying, username character varying, puntosuser integer, idrol integer)
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    INSERT INTO Usuarios (nombreusuario, apellidousuario, dui, email, username, clave, puntosuser, idrol)
-    VALUES (nombre, apellido, dui, correo, usuario, clave, puntos, rol)
-    RETURNING idusuario, nombreusuario, apellidousuario, email, username, puntosuser, idrol;
+  RETURN QUERY
+  INSERT INTO Usuarios (
+    nombreusuario, apellidousuario, dui, email, username, clave, puntosuser, idrol
+  )
+  VALUES (
+    nombre, apellido, dui, correo, usuario, clave, puntos, rol
+  )
+  RETURNING 
+    Usuarios.idusuario, Usuarios.nombreusuario, Usuarios.apellidousuario,
+    Usuarios.email, Usuarios.username, Usuarios.puntosuser, Usuarios.idrol;
 END;
 $$;
 
@@ -272,16 +244,37 @@ $$;
 ALTER FUNCTION public.delete_apuesta(apuestaid integer) OWNER TO postgres;
 
 --
--- Name: delete_equipo(integer); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: delete_equipo(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.delete_equipo(equipoid integer) RETURNS TABLE(idequipo integer, nombreequipo character varying, representanteequipo character varying, fechafundacion date)
+CREATE FUNCTION public.delete_equipo(user_id integer, equipoid integer) RETURNS TABLE(idequipo integer, nombreequipo character varying, representanteequipo character varying, fechafundacion date)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
+    -- Verificar si el usuario existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = user_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
+
+    -- Obtener el rol del usuario
+    SELECT get_user_role(user_id) INTO user_role;
+
+    -- Validar que el usuario tenga el rol de superadmin
+    IF user_role != 'superadmin' THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Verificar si el equipo existe
+    IF NOT EXISTS (SELECT 1 FROM equipos e WHERE e.idequipo = equipoid) THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Eliminar el equipo
     RETURN QUERY
-    DELETE FROM equipos e -- Usamos un alias explícito "e"
-    WHERE e.idequipo = equipoId -- Alias explícito aquí
+    DELETE FROM equipos e
+    WHERE e.idequipo = equipoid
     RETURNING
         e.idequipo AS idEquipo,
         e.nombreequipo AS nombreEquipo,
@@ -291,48 +284,95 @@ END;
 $$;
 
 
-ALTER FUNCTION public.delete_equipo(equipoid integer) OWNER TO postgres;
+ALTER FUNCTION public.delete_equipo(user_id integer, equipoid integer) OWNER TO postgres;
 
 --
--- Name: delete_partido(integer); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: delete_partido(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.delete_partido(partidoid integer) RETURNS TABLE(idpartido integer, fechapartido date, marcadorlocal integer, marcadorvisitante integer, idequipolocal integer, idequipovisitante integer)
+CREATE FUNCTION public.delete_partido(user_id integer, partidoid integer) RETURNS TABLE(idpartido integer, fechapartido date, marcadorlocal integer, marcadorvisitante integer, idequipolocal integer, idequipovisitante integer)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
+    -- Verificar si el usuario existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = user_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
+
+    -- Obtener el rol del usuario
+    SELECT get_user_role(user_id) INTO user_role;
+
+    -- Validar que el usuario tenga el rol de superadmin
+    IF user_role != 'superadmin' THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Verificar si el partido existe
+    IF NOT EXISTS (SELECT 1 FROM partido p WHERE p.idpartido = partidoid) THEN
+        RAISE EXCEPTION 'Partido no encontrado';
+    END IF;
+
+    -- Eliminar el partido
     RETURN QUERY
-    DELETE FROM partido
-    WHERE partido.idpartido = partidoId -- Alias explícito para evitar ambigüedad
-    RETURNING partido.idpartido AS idPartido, 
-              partido.fechapartido AS fechaPartido, 
-              partido.marcadorlocal AS marcadorLocal, 
-              partido.marcadorvisitante AS marcadorVisitante, 
-              partido.idequipolocal AS idEquipoLocal, 
-              partido.idequipovisitante AS idEquipoVisitante;
+    DELETE FROM partido p
+    WHERE p.idpartido = partidoid
+    RETURNING p.idpartido AS idPartido, 
+              p.fechapartido AS fechaPartido, 
+              p.marcadorlocal AS marcadorLocal, 
+              p.marcadorvisitante AS marcadorVisitante, 
+              p.idequipolocal AS idEquipoLocal, 
+              p.idequipovisitante AS idEquipoVisitante;
 END;
 $$;
 
 
-ALTER FUNCTION public.delete_partido(partidoid integer) OWNER TO postgres;
+ALTER FUNCTION public.delete_partido(user_id integer, partidoid integer) OWNER TO postgres;
 
 --
--- Name: delete_user(integer); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: delete_user(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.delete_user(userid integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying)
+CREATE FUNCTION public.delete_user(superadmin_id integer, userid integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, email character varying, username character varying)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
+    -- Verificar si el usuario que realiza la acción (superadmin_id) existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = superadmin_id) THEN
+        RAISE EXCEPTION 'Usuario que realiza la acción no encontrado';
+    END IF;
+
+    -- Obtener el rol del usuario que realiza la acción
+    SELECT get_user_role(superadmin_id) INTO user_role;
+
+    -- Validar que el usuario que realiza la acción sea superadmin
+    IF user_role != 'superadmin' THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Verificar si el usuario a eliminar (userid) existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = userid) THEN
+        RAISE EXCEPTION 'Usuario a eliminar no encontrado';
+    END IF;
+
+    -- Eliminar el usuario
     RETURN QUERY
-    DELETE FROM Usuarios
-    WHERE Usuarios.idusuario = userId
-    RETURNING Usuarios.idusuario, Usuarios.nombreusuario, Usuarios.apellidousuario;
+    DELETE FROM usuarios u
+    WHERE u.idusuario = userid
+    RETURNING
+        u.idusuario,
+        u.nombreusuario,
+        u.apellidousuario,
+        u.email,
+        u.username;
 END;
 $$;
 
 
-ALTER FUNCTION public.delete_user(userid integer) OWNER TO postgres;
+ALTER FUNCTION public.delete_user(superadmin_id integer, userid integer) OWNER TO postgres;
 
 --
 -- Name: get_all_apuestas(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -381,31 +421,6 @@ $$;
 ALTER FUNCTION public.get_all_equipos() OWNER TO postgres;
 
 --
--- Name: get_all_equipos(integer); Type: FUNCTION; Schema: public; Owner: postgres
---
-
-CREATE FUNCTION public.get_all_equipos(user_id integer) RETURNS TABLE(idequipo integer, nombreequipo character varying, representanteequipo character varying, fechafundacion date)
-    LANGUAGE plpgsql
-    AS $$
-DECLARE
-    user_role VARCHAR;
-BEGIN
-    -- Obtener el rol del usuario
-    SELECT get_user_role(user_id) INTO user_role;
-
-    -- Validar rol permitido
-    IF user_role IN ('usuario', 'admin', 'superadmin') THEN
-        RETURN QUERY SELECT * FROM equipos;
-    ELSE
-        RAISE EXCEPTION 'Permiso denegado';
-    END IF;
-END;
-$$;
-
-
-ALTER FUNCTION public.get_all_equipos(user_id integer) OWNER TO postgres;
-
---
 -- Name: get_all_partidos(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -431,13 +446,29 @@ $$;
 ALTER FUNCTION public.get_all_partidos() OWNER TO postgres;
 
 --
--- Name: get_all_users(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: get_all_users(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_all_users() RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, dui character varying, email character varying, username character varying, puntosuser integer, rol character varying)
+CREATE FUNCTION public.get_all_users(superadmin_id integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, dui character varying, email character varying, username character varying, puntosuser integer, rol character varying)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
+    -- Verificar si el usuario existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = superadmin_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
+
+    -- Obtener el rol del usuario
+    SELECT get_user_role(superadmin_id) INTO user_role;
+
+    -- Validar que el usuario sea superadmin
+    IF user_role != 'superadmin' THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Obtener todos los usuarios
     RETURN QUERY
     SELECT 
         u.idusuario,
@@ -454,7 +485,7 @@ END;
 $$;
 
 
-ALTER FUNCTION public.get_all_users() OWNER TO postgres;
+ALTER FUNCTION public.get_all_users(superadmin_id integer) OWNER TO postgres;
 
 --
 -- Name: get_apuesta_by_id(integer); Type: FUNCTION; Schema: public; Owner: postgres
@@ -526,14 +557,20 @@ CREATE FUNCTION public.get_equipo_by_id(equipoid integer) RETURNS TABLE(idequipo
     LANGUAGE plpgsql
     AS $$
 BEGIN
+    -- Verificar si el equipo existe
+    IF NOT EXISTS (SELECT 1 FROM equipos e WHERE e.idequipo = equipoid) THEN
+        RAISE EXCEPTION 'Equipo no encontrado';
+    END IF;
+
+    -- Retornar el equipo
     RETURN QUERY
     SELECT 
-        e.idequipo AS idEquipo,
-        e.nombreequipo AS nombreEquipo,
-        e.representanteequipo AS representanteEquipo,
-        e.fechafundacion AS fechaFundacion
+        e.idequipo,
+        e.nombreequipo,
+        e.representanteequipo,
+        e.fechafundacion
     FROM equipos e
-    WHERE e.idequipo = equipoId;
+    WHERE e.idequipo = equipoid;
 END;
 $$;
 
@@ -592,20 +629,14 @@ ALTER FUNCTION public.get_partido_by_id(partidoid integer) OWNER TO postgres;
 -- Name: get_user_by_email(text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_user_by_email(param_email text) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, dui character varying, email character varying, username character varying, puntosuser integer, idrol integer, clave character varying)
+CREATE FUNCTION public.get_user_by_email(param_email text) RETURNS TABLE(idusuario integer, email character varying, clave character varying)
     LANGUAGE plpgsql
     AS $$
 BEGIN
     RETURN QUERY
     SELECT
         u.idusuario AS idUsuario,
-        u.nombreusuario AS nombreUsuario,
-        u.apellidousuario AS apellidoUsuario,
-        u.dui AS dui,
         u.email AS email,
-        u.username AS userName,
-        u.puntosuser AS puntosUser,
-        u.idrol AS idRol,
         u.clave AS clave
     FROM usuarios u
     WHERE u.email = param_email;
@@ -616,13 +647,34 @@ $$;
 ALTER FUNCTION public.get_user_by_email(param_email text) OWNER TO postgres;
 
 --
--- Name: get_user_by_id(integer); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: get_user_by_id(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_user_by_id(userid integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, dui character varying, email character varying, username character varying, puntosuser integer, rol character varying)
+CREATE FUNCTION public.get_user_by_id(superadmin_id integer, userid integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, dui character varying, email character varying, username character varying, puntosuser integer, rol character varying)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
+    -- Verificar si el superadmin existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = superadmin_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
+
+    -- Obtener el rol del superadmin
+    SELECT get_user_role(superadmin_id) INTO user_role;
+
+    -- Validar que el usuario sea superadmin
+    IF user_role != 'superadmin' THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Verificar si el usuario a consultar existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = userid) THEN
+        RAISE EXCEPTION 'Usuario a consultar no encontrado';
+    END IF;
+
+    -- Obtener los datos del usuario
     RETURN QUERY
     SELECT 
         u.idusuario,
@@ -635,12 +687,12 @@ BEGIN
         r.tiporol
     FROM Usuarios u
     JOIN Roles r ON u.idrol = r.idrol
-    WHERE u.idusuario = userId;
+    WHERE u.idusuario = userid;
 END;
 $$;
 
 
-ALTER FUNCTION public.get_user_by_id(userid integer) OWNER TO postgres;
+ALTER FUNCTION public.get_user_by_id(superadmin_id integer, userid integer) OWNER TO postgres;
 
 --
 -- Name: get_user_role(integer); Type: FUNCTION; Schema: public; Owner: postgres
@@ -721,53 +773,31 @@ $$;
 ALTER FUNCTION public.set_fecha_fundacion_equipo() OWNER TO postgres;
 
 --
--- Name: update_apuesta(integer, integer, numeric, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
---
-
-CREATE FUNCTION public.update_apuesta(apuestaid integer, usuarioid integer, cantidad numeric, estadoapuestaid integer, partidoid integer) RETURNS TABLE(idapuestas integer, idusuario integer, cantidadapostada numeric, fechaapuesta date, idestadoapuesta integer, idpartido integer)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RETURN QUERY
-    UPDATE apuestas
-    SET
-        idusuario = COALESCE(usuarioId, apuestas.idusuario),
-        cantidadapostada = COALESCE(cantidad, apuestas.cantidadapostada),
-        idestadoapuesta = COALESCE(estadoApuestaId, apuestas.idestadoapuesta),
-        idpartido = COALESCE(partidoId, apuestas.idpartido)
-    WHERE apuestas.idapuestas = apuestaId
-    RETURNING
-        apuestas.idapuestas AS idApuestas,
-        apuestas.idusuario AS idUsuario,
-        apuestas.cantidadapostada AS cantidadApostada,
-        apuestas.fechaapuesta AS fechaApuesta,
-        apuestas.idestadoapuesta AS idEstadoApuesta,
-        apuestas.idpartido AS idPartido;
-END;
-$$;
-
-
-ALTER FUNCTION public.update_apuesta(apuestaid integer, usuarioid integer, cantidad numeric, estadoapuestaid integer, partidoid integer) OWNER TO postgres;
-
---
 -- Name: update_apuesta(integer, integer, numeric, integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.update_apuesta(p_idapuestas integer, p_idusuario integer, p_cantidadapostada numeric, p_idestadoapuesta integer, p_idpartido integer, p_golequipolocal integer, p_golequipovisitante integer) RETURNS TABLE(idapuestas integer, idusuario integer, cantidadapostada numeric, fechaapuesta date, idestadoapuesta integer, idpartido integer, golequipolocal integer, golequipovisitante integer)
+CREATE FUNCTION public.update_apuesta(p_idapuestas integer, p_idusuario integer, p_cantidadapostada numeric, p_idestadoapuesta integer, p_idpartido integer, p_golequipolocal integer, p_golequipovisitante integer) RETURNS TABLE(idapuestas integer, idusuario integer, cantidadapostada numeric, idestadoapuesta integer, idpartido integer, golequipolocal integer, golequipovisitante integer)
     LANGUAGE plpgsql
     AS $$
 BEGIN
     RETURN QUERY
-    UPDATE public.apuestas
+    UPDATE public.apuestas a
     SET
-        idusuario = COALESCE(p_idUsuario, idusuario),
-        cantidadapostada = COALESCE(p_cantidadApostada, cantidadapostada),
-        idestadoapuesta = COALESCE(p_idEstadoApuesta, idestadoapuesta),
-        idpartido = COALESCE(p_idPartido, idpartido),
-        golequipolocal = COALESCE(p_golEquipoLocal, golequipolocal),
-        golequipovisitante = COALESCE(p_golEquipoVisitante, golequipovisitante)
-    WHERE idapuestas = p_idapuestas
-    RETURNING *;
+        idusuario = COALESCE(p_idUsuario, a.idusuario),
+        cantidadapostada = COALESCE(p_cantidadApostada, a.cantidadapostada),
+        idestadoapuesta = COALESCE(p_idEstadoApuesta, a.idestadoapuesta),
+        idpartido = COALESCE(p_idPartido, a.idpartido),
+        golequipolocal = COALESCE(p_golEquipoLocal, a.golequipolocal),
+        golequipovisitante = COALESCE(p_golEquipoVisitante, a.golequipovisitante)
+    WHERE a.idapuestas = p_idapuestas
+    RETURNING 
+        a.idapuestas, 
+        a.idusuario, 
+        a.cantidadapostada, 
+        a.idestadoapuesta, 
+        a.idpartido, 
+        a.golequipolocal, 
+        a.golequipovisitante;
 END;
 $$;
 
@@ -775,20 +805,41 @@ $$;
 ALTER FUNCTION public.update_apuesta(p_idapuestas integer, p_idusuario integer, p_cantidadapostada numeric, p_idestadoapuesta integer, p_idpartido integer, p_golequipolocal integer, p_golequipovisitante integer) OWNER TO postgres;
 
 --
--- Name: update_equipo(integer, character varying, character varying, date); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: update_equipo(integer, integer, character varying, character varying, date); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.update_equipo(equipoid integer, nombre character varying, representante character varying, fecha date) RETURNS TABLE(idequipo integer, nombreequipo character varying, representanteequipo character varying, fechafundacion date)
+CREATE FUNCTION public.update_equipo(user_id integer, equipoid integer, nombre character varying, representante character varying, fecha date) RETURNS TABLE(idequipo integer, nombreequipo character varying, representanteequipo character varying, fechafundacion date)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
+    -- Verificar si el usuario existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = user_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
+
+    -- Obtener el rol del usuario
+    SELECT get_user_role(user_id) INTO user_role;
+
+    -- Validar que el usuario tenga el rol de superadmin
+    IF user_role != 'superadmin' THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Verificar si el equipo existe
+    IF NOT EXISTS (SELECT 1 FROM equipos e WHERE e.idequipo = equipoid) THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Actualizar el equipo
     RETURN QUERY
-    UPDATE equipos e -- Usamos un alias explícito "e"
+    UPDATE equipos e
     SET
         nombreequipo = COALESCE(nombre, e.nombreequipo),
         representanteequipo = COALESCE(representante, e.representanteequipo),
         fechafundacion = COALESCE(fecha, e.fechafundacion)
-    WHERE e.idequipo = equipoId -- Alias explícito aquí
+    WHERE e.idequipo = equipoid
     RETURNING
         e.idequipo AS idEquipo,
         e.nombreequipo AS nombreEquipo,
@@ -798,95 +849,115 @@ END;
 $$;
 
 
-ALTER FUNCTION public.update_equipo(equipoid integer, nombre character varying, representante character varying, fecha date) OWNER TO postgres;
+ALTER FUNCTION public.update_equipo(user_id integer, equipoid integer, nombre character varying, representante character varying, fecha date) OWNER TO postgres;
 
 --
--- Name: update_partido(integer, date, integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: update_partido(integer, integer, date, integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.update_partido(partidoid integer, param_fecha date, param_marcadorlocal integer, param_marcadorvisitante integer, param_equipolocalid integer, param_equipovisitanteid integer) RETURNS TABLE(idpartido integer, fechapartido date, marcadorlocal integer, marcadorvisitante integer, idequipolocal integer, idequipovisitante integer)
+CREATE FUNCTION public.update_partido(user_id integer, partidoid integer, param_fecha date, param_marcadorlocal integer, param_marcadorvisitante integer, param_equipolocalid integer, param_equipovisitanteid integer) RETURNS TABLE(idpartido integer, fechapartido date, marcadorlocal integer, marcadorvisitante integer, idequipolocal integer, idequipovisitante integer)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
+    -- Verificar si el usuario existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = user_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
+
+    -- Obtener el rol del usuario
+    SELECT get_user_role(user_id) INTO user_role;
+
+    -- Validar que el usuario tenga el rol de admin o superadmin
+    IF user_role NOT IN ('admin', 'superadmin') THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Verificar si el partido existe
+    IF NOT EXISTS (SELECT 1 FROM partido p WHERE p.idpartido = partidoid) THEN
+        RAISE EXCEPTION 'Partido no encontrado';
+    END IF;
+
+    -- Verificar si el equipo local existe
+    IF param_equipolocalid IS NOT NULL AND NOT EXISTS (SELECT 1 FROM equipos e WHERE e.idequipo = param_equipolocalid) THEN
+        RAISE EXCEPTION 'equipoLocal no encontrado';
+    END IF;
+
+    -- Verificar si el equipo visitante existe
+    IF param_equipovisitanteid IS NOT NULL AND NOT EXISTS (SELECT 1 FROM equipos e WHERE e.idequipo = param_equipovisitanteid) THEN
+        RAISE EXCEPTION 'equipoVisitante no encontrado';
+    END IF;
+
+    -- Actualizar el partido
     RETURN QUERY
-    UPDATE partido
+    UPDATE partido p
     SET 
-        fechapartido = COALESCE(param_fecha, partido.fechapartido),
-        marcadorlocal = COALESCE(param_marcadorLocal, partido.marcadorlocal),
-        marcadorvisitante = COALESCE(param_marcadorVisitante, partido.marcadorvisitante),
-        idequipolocal = COALESCE(param_equipoLocalId, partido.idequipolocal),
-        idequipovisitante = COALESCE(param_equipoVisitanteId, partido.idequipovisitante)
-    WHERE partido.idpartido = partidoId
-    RETURNING partido.idpartido AS idPartido, 
-              partido.fechapartido AS fechaPartido, 
-              partido.marcadorlocal AS marcadorLocal, 
-              partido.marcadorvisitante AS marcadorVisitante, 
-              partido.idequipolocal AS idEquipoLocal, 
-              partido.idequipovisitante AS idEquipoVisitante;
+        fechapartido = COALESCE(param_fecha, p.fechapartido),
+        marcadorlocal = COALESCE(param_marcadorlocal, p.marcadorlocal),
+        marcadorvisitante = COALESCE(param_marcadorvisitante, p.marcadorvisitante),
+        idequipolocal = COALESCE(param_equipolocalid, p.idequipolocal),
+        idequipovisitante = COALESCE(param_equipovisitanteid, p.idequipovisitante)
+    WHERE p.idpartido = partidoid
+    RETURNING p.idpartido AS idPartido, 
+              p.fechapartido AS fechaPartido, 
+              p.marcadorlocal AS marcadorLocal, 
+              p.marcadorvisitante AS marcadorVisitante, 
+              p.idequipolocal AS idEquipoLocal, 
+              p.idequipovisitante AS idEquipoVisitante;
 END;
 $$;
 
 
-ALTER FUNCTION public.update_partido(partidoid integer, param_fecha date, param_marcadorlocal integer, param_marcadorvisitante integer, param_equipolocalid integer, param_equipovisitanteid integer) OWNER TO postgres;
+ALTER FUNCTION public.update_partido(user_id integer, partidoid integer, param_fecha date, param_marcadorlocal integer, param_marcadorvisitante integer, param_equipolocalid integer, param_equipovisitanteid integer) OWNER TO postgres;
 
 --
--- Name: update_user(integer, text, text, text, text, text, text, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: update_user(integer, integer, character varying, character varying, character varying, character varying, character varying, character varying, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.update_user(userid integer, nombre text, apellido text, param_dui text, correo text, usuario text, param_clave text, puntos integer, rol integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, email character varying, username character varying, puntosuser integer, idrol integer)
+CREATE FUNCTION public.update_user(superadmin_id integer, userid integer, nombre character varying, apellido character varying, param_dui character varying, correo character varying, usuario character varying, param_clave character varying, puntos integer, rol integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, email character varying, username character varying, puntosuser integer, idrol integer)
     LANGUAGE plpgsql
     AS $$
+DECLARE
+    superadmin_role VARCHAR;
 BEGIN
+    -- Verificar si el superadmin existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = superadmin_id) THEN
+        RAISE EXCEPTION 'Usuario no encontrado';
+    END IF;
+
+    -- Obtener el rol del superadmin
+    SELECT get_user_role(superadmin_id) INTO superadmin_role;
+
+    -- Validar que el usuario sea superadmin
+    IF superadmin_role != 'superadmin' THEN
+        RAISE EXCEPTION 'Permiso denegado';
+    END IF;
+
+    -- Verificar si el usuario a actualizar existe
+    IF NOT EXISTS (SELECT 1 FROM usuarios u WHERE u.idusuario = userid) THEN
+        RAISE EXCEPTION 'Usuario a actualizar no encontrado';
+    END IF;
+
+    -- Actualizar el usuario
     RETURN QUERY
-    UPDATE Usuarios
+    UPDATE usuarios u
     SET 
-        nombreusuario = COALESCE(nombre, Usuarios.nombreusuario),
-        apellidousuario = COALESCE(apellido, Usuarios.apellidousuario),
-        dui = COALESCE(param_dui, Usuarios.dui),
-        email = COALESCE(correo, Usuarios.email),
-        username = COALESCE(usuario, Usuarios.username),
-        clave = COALESCE(param_clave, Usuarios.clave), -- Uso del nuevo nombre del parámetro
-        puntosuser = COALESCE(puntos, Usuarios.puntosuser),
-        idrol = COALESCE(rol, Usuarios.idrol)
-    WHERE Usuarios.idusuario = userId
-    RETURNING Usuarios.idusuario AS idUsuario, 
-              Usuarios.nombreusuario AS nombreUsuario, 
-              Usuarios.apellidousuario AS apellidoUsuario, 
-              Usuarios.email AS email, 
-              Usuarios.username AS userName, 
-              Usuarios.puntosuser AS puntosUser, 
-              Usuarios.idrol AS idRol;
+        nombreusuario = COALESCE(nombre, u.nombreusuario),
+        apellidousuario = COALESCE(apellido, u.apellidousuario),
+        dui = COALESCE(param_dui, u.dui),
+        email = COALESCE(correo, u.email),
+        username = COALESCE(usuario, u.username),
+        clave = COALESCE(param_clave, u.clave),
+        puntosuser = COALESCE(puntos, u.puntosuser),
+        idrol = COALESCE(rol, u.idrol)
+    WHERE u.idusuario = userid
+    RETURNING u.idusuario, u.nombreusuario, u.apellidousuario, u.email, u.username, u.puntosuser, u.idrol;
 END;
 $$;
 
 
-ALTER FUNCTION public.update_user(userid integer, nombre text, apellido text, param_dui text, correo text, usuario text, param_clave text, puntos integer, rol integer) OWNER TO postgres;
-
---
--- Name: update_user(integer, character varying, character varying, character varying, character varying, character varying, character varying, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
---
-
-CREATE FUNCTION public.update_user(userid integer, nombre character varying, apellido character varying, dui character varying, correo character varying, usuario character varying, clave character varying, puntos integer, rol integer) RETURNS TABLE(idusuario integer, nombreusuario character varying, apellidousuario character varying, email character varying, username character varying, puntosuser integer, idrol integer)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-    UPDATE Usuarios
-    SET 
-        nombreusuario = COALESCE(nombre, nombreusuario),
-        apellidousuario = COALESCE(apellido, apellidousuario),
-        dui = COALESCE(dui, dui),
-        email = COALESCE(correo, email),
-        username = COALESCE(usuario, username),
-        clave = COALESCE(clave, clave),
-        puntosuser = COALESCE(puntos, puntosuser),
-        idrol = COALESCE(rol, idrol)
-    WHERE idusuario = userId
-    RETURNING idusuario, nombreusuario, apellidousuario, email, username, puntosuser, idrol;
-END;
-$$;
-
-
-ALTER FUNCTION public.update_user(userid integer, nombre character varying, apellido character varying, dui character varying, correo character varying, usuario character varying, clave character varying, puntos integer, rol integer) OWNER TO postgres;
+ALTER FUNCTION public.update_user(superadmin_id integer, userid integer, nombre character varying, apellido character varying, param_dui character varying, correo character varying, usuario character varying, param_clave character varying, puntos integer, rol integer) OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -975,7 +1046,7 @@ ALTER SEQUENCE public.equipos_idequipo_seq OWNED BY public.equipos.idequipo;
 CREATE TABLE public.estadoapuesta (
     idestadoapuesta integer NOT NULL,
     estadodeapuesta character varying(50) NOT NULL,
-    CONSTRAINT estado_check CHECK (((estadodeapuesta)::text = ANY ((ARRAY['pendiente'::character varying, 'ganada'::character varying, 'perdida'::character varying, 'empate'::character varying])::text[])))
+    CONSTRAINT estado_check CHECK (((estadodeapuesta)::text = ANY (ARRAY[('pendiente'::character varying)::text, ('ganada'::character varying)::text, ('perdida'::character varying)::text, ('empate'::character varying)::text])))
 );
 
 
@@ -1156,6 +1227,115 @@ ALTER TABLE ONLY public.roles ALTER COLUMN idrol SET DEFAULT nextval('public.rol
 --
 
 ALTER TABLE ONLY public.usuarios ALTER COLUMN idusuario SET DEFAULT nextval('public.usuarios_idusuario_seq'::regclass);
+
+
+--
+-- Data for Name: apuestas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.apuestas (idapuestas, idusuario, cantidadapostada, fechaapuesta, idestadoapuesta, idpartido, golequipolocal, golequipovisitante) FROM stdin;
+\.
+
+
+--
+-- Data for Name: equipos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.equipos (idequipo, nombreequipo, representanteequipo, fechafundacion) FROM stdin;
+3	FC Barcelona	Meguru Bachira	2024-11-19
+4	Equipo Nuevo	Juan Pérez	2024-01-01
+6	Equipo XYZ	John Doe	2024-11-21
+7	Equipo Ejemplo	Representante Ejemplo	2024-11-21
+9	NuevoEquipo	Yoceman	2024-11-21
+10	Madrid	Joss	2024-11-21
+11	ElPEPE	Joss	2024-11-21
+\.
+
+
+--
+-- Data for Name: estadoapuesta; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.estadoapuesta (idestadoapuesta, estadodeapuesta) FROM stdin;
+1	pendiente
+2	ganada
+3	perdida
+4	empate
+\.
+
+
+--
+-- Data for Name: partido; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.partido (idpartido, fechapartido, marcadorlocal, marcadorvisitante, idequipolocal, idequipovisitante) FROM stdin;
+16	2024-11-25	\N	\N	3	11
+17	2023-10-15	3	1	9	11
+\.
+
+
+--
+-- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.roles (idrol, tiporol) FROM stdin;
+2	usuario
+3	admin
+4	superadmin
+\.
+
+
+--
+-- Data for Name: usuarios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.usuarios (idusuario, nombreusuario, apellidousuario, dui, email, username, clave, puntosuser, idrol) FROM stdin;
+27	papadioss	davicito	12345678-9	davicito@gmail.com	sosa1	$2b$10$0q0S1zGVcSWxLdFjRtwksuFCT1OP9nZFxKbRQr7KCE67YZcAGcmZG	0	2
+31	superadmin	super	12345678-9	superadmin@gmail.com	superadmin	$2b$10$YpY0f//yhFcziNeqzQU6jehzZHnZOXczZRj7Iolxu90GSSOl1zMlW	0	4
+28	adminUser	pepe	12345678-9	pepe@gmail.com	sosa12	$2b$10$7yUc/XGy6pp0yxSQtZ4JnevEI/OctM9r6ZggA1u66M5OBzEarf29O	0	3
+\.
+
+
+--
+-- Name: apuestas_idapuestas_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.apuestas_idapuestas_seq', 19, true);
+
+
+--
+-- Name: equipos_idequipo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.equipos_idequipo_seq', 11, true);
+
+
+--
+-- Name: estadoapuesta_idestadoapuesta_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.estadoapuesta_idestadoapuesta_seq', 1, false);
+
+
+--
+-- Name: partido_idpartido_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.partido_idpartido_seq', 17, true);
+
+
+--
+-- Name: roles_idrol_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.roles_idrol_seq', 4, true);
+
+
+--
+-- Name: usuarios_idusuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.usuarios_idusuario_seq', 36, true);
 
 
 --

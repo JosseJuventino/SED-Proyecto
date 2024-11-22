@@ -31,7 +31,7 @@ const loginController = {
 
         // Buscar al usuario por email
         const user = await usuariosModel.getByEmail(email);
-        console.log("Usuario encontrado:", user);
+        console.log("Usuario encontrado");
 
         if (!user) {
           res.writeHead(401, { "Content-Type": "application/json" });
@@ -69,14 +69,14 @@ const loginController = {
           })
         );
       } catch (error) {
-        console.error("Error en el controlador de login:", error);
+        console.error("Error en el controlador de login:");
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Error en el servidor" }));
       }
     });
 
     req.on("error", (err) => {
-      console.error("Error en la solicitud:", err);
+      console.error("Error en la solicitud:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Error en la solicitud" }));
     });

@@ -15,7 +15,7 @@ const partidoController = {
         res.end(JSON.stringify(partidos));
       }
     } catch (error) {
-      error;
+      console.error("Error al obtener partidos:");
       if (!res.headersSent) {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(
@@ -52,7 +52,7 @@ const partidoController = {
         res.end(JSON.stringify(partido));
       }
     } catch (error) {
-      error;
+      console.error("Error al obtener el partido:");
       if (!res.headersSent) {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(
@@ -65,11 +65,28 @@ const partidoController = {
     }
   },
 
+  // En tu controlador (partido.controller.js)
   create: async (req, res) => {
     try {
-      const partido = await parseBody(req);
+      // Analizar el cuerpo de la solicitud para obtener userId y los datos del partido
+      const body = await parseBody(req);
+      const userId = body.userId; // Asegúrate de que el userId esté en el cuerpo de la solicitud
+      const partido = {
+        fechaPartido: body.fechaPartido,
+        marcadorLocal: body.marcadorLocal,
+        marcadorVisitante: body.marcadorVisitante,
+        idEquipoLocal: body.idEquipoLocal,
+        idEquipoVisitante: body.idEquipoVisitante,
+      };
 
       // Validaciones
+      if (!userId || !isValidNumericId(userId)) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: false, error: "ID de usuario inválido" })
+        );
+        return;
+      }
       if (!partido.idEquipoLocal || !isValidNumericId(partido.idEquipoLocal)) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(
@@ -122,7 +139,8 @@ const partidoController = {
         return;
       }
 
-      await partidoModel.create(partido);
+      // Llamar al modelo para crear el partido
+      await partidoModel.create(userId, partido);
       res.writeHead(201, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -131,7 +149,7 @@ const partidoController = {
         })
       );
     } catch (error) {
-      error;
+      console.error("Error al crear el partido:"); // Asegúrate de imprimir el error
       if (!res.headersSent) {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(
@@ -141,6 +159,7 @@ const partidoController = {
     }
   },
 
+  // En tu controlador (partido.controller.js)
   update: async (req, res) => {
     const id = req.params.id;
 
@@ -151,9 +170,25 @@ const partidoController = {
     }
 
     try {
-      const partido = await parseBody(req);
+      // Analizar el cuerpo de la solicitud para obtener userId y los datos del partido
+      const body = await parseBody(req);
+      const userId = body.userId; // Asegúrate de que el userId esté en el cuerpo de la solicitud
+      const partido = {
+        fechaPartido: body.fechaPartido,
+        marcadorLocal: body.marcadorLocal,
+        marcadorVisitante: body.marcadorVisitante,
+        idEquipoLocal: body.idEquipoLocal,
+        idEquipoVisitante: body.idEquipoVisitante,
+      };
 
-      // Validaciones dinámicas
+      // Validaciones
+      if (!userId || !isValidNumericId(userId)) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: false, error: "ID de usuario inválido" })
+        );
+        return;
+      }
       if (partido.idEquipoLocal && !isValidNumericId(partido.idEquipoLocal)) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(
@@ -206,7 +241,8 @@ const partidoController = {
         return;
       }
 
-      const updated = await partidoModel.update(id, partido);
+      // Llamar al modelo para actualizar el partido
+      const updated = await partidoModel.update(userId, id, partido);
       if (!updated) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(
@@ -223,28 +259,47 @@ const partidoController = {
         })
       );
     } catch (error) {
-      error;
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(
-        JSON.stringify({
-          success: false,
-          error: "Error al actualizar el partido",
-        })
-      );
+      console.error("Error al actualizar el partido:"); // Asegúrate de imprimir el error
+      if (!res.headersSent) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+            error: "Error al actualizar el partido",
+          })
+        );
+      }
     }
   },
 
   delete: async (req, res) => {
-    const id = req.params.id;
+    const partidoId = req.params.id;
 
-    if (!isValidNumericId(id)) {
+    // Validar que el ID del partido sea válido
+    if (!isValidNumericId(partidoId)) {
       res.writeHead(400, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ success: false, error: "ID inválido" }));
+      res.end(
+        JSON.stringify({ success: false, error: "ID de partido inválido" })
+      );
       return;
     }
 
     try {
-      const deleted = await partidoModel.delete(id);
+      // Analizar el cuerpo de la solicitud para obtener el userId
+      const body = await parseBody(req);
+      const userId = body.userId;
+
+      // Validar que el userId sea válido
+      if (!userId || !isValidNumericId(userId)) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: false, error: "ID de usuario inválido" })
+        );
+        return;
+      }
+
+      // Llamar al modelo para eliminar el partido
+      const deleted = await partidoModel.delete(userId, partidoId);
       if (!deleted) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(
@@ -261,14 +316,16 @@ const partidoController = {
         })
       );
     } catch (error) {
-      error;
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(
-        JSON.stringify({
-          success: false,
-          error: "Error al eliminar el partido",
-        })
-      );
+      console.error("Error al eliminar el partido:"); // Registro del error
+      if (!res.headersSent) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+            error: "Error al eliminar el partido",
+          })
+        );
+      }
     }
   },
 };
