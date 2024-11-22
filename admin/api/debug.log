@@ -1,0 +1,369 @@
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYwMTM5fQ.qRr-fZoBOtHawV2_t1O1FmTFSFv0j-EluykzzqTNiek
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYwMTM5fQ.qRr-fZoBOtHawV2_t1O1FmTFSFv0j-EluykzzqTNiek
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYwMzk0fQ.4s2-frMOO43pJ9lJUBqM6wyOkw8HXr25gIW6Zkg74YE
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYwMzk0fQ.4s2-frMOO43pJ9lJUBqM6wyOkw8HXr25gIW6Zkg74YE
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYwNTU1fQ.P9jZ9fw14vNlORhi_6mD63YQiNbipbo9BsWENtnEyr8
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYwNTU1fQ.P9jZ9fw14vNlORhi_6mD63YQiNbipbo9BsWENtnEyr8
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYwNjY4fQ.njZOXNJ4xuBD3eSFTDw02jldEQz0MupRLMAvLwo95Og
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYwNjY4fQ.njZOXNJ4xuBD3eSFTDw02jldEQz0MupRLMAvLwo95Og
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxMDUxfQ.OmKXCR4PVfGDVz5EUd8XB56U1Im6qz8mPptHeWrUjjw
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxMDUxfQ.OmKXCR4PVfGDVz5EUd8XB56U1Im6qz8mPptHeWrUjjw
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxMTEzfQ.X8cLvxfo4ZAFJ8zSoY1W3gMA9PsM_Vf1WNQZzOKefVM
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxMTEzfQ.X8cLvxfo4ZAFJ8zSoY1W3gMA9PsM_Vf1WNQZzOKefVM
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNTU3fQ.sLTeg7NK5hedLBXUhmOFw1gRqAF3wtNcX7gx77rwozU
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNTU3fQ.sLTeg7NK5hedLBXUhmOFw1gRqAF3wtNcX7gx77rwozU
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNjQ5fQ.cbz11uEiFad00KwzCPWKfhkt9b29BBYzUkcP9d4xr5k
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNjQ5fQ.cbz11uEiFad00KwzCPWKfhkt9b29BBYzUkcP9d4xr5k
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNjcyfQ.k7pYJsXWGKiH-BTZ2vD0IwsWOfAPACbktU_xZr8LTck
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNjcyfQ.k7pYJsXWGKiH-BTZ2vD0IwsWOfAPACbktU_xZr8LTck
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNjk2fQ.qWFXhoV9EzMGICZYZ8wfJ38GbNcDNDjk2oq_n--iRnk
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNjk2fQ.qWFXhoV9EzMGICZYZ8wfJ38GbNcDNDjk2oq_n--iRnk
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNzU5fQ.VLaejOHxmjMmgxcaXGKfsDK8YnSLEyA8KF28D_VyUlk
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxNzU5fQ.VLaejOHxmjMmgxcaXGKfsDK8YnSLEyA8KF28D_VyUlk
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxOTM4fQ.jwcnwBqzqmCUB8DyZeSd2XYvH4OG5eYrr4U47B3EiEQ
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxOTM4fQ.jwcnwBqzqmCUB8DyZeSd2XYvH4OG5eYrr4U47B3EiEQ
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxOTkyfQ.sRvJaT6eeG_qMDhFEWYQdEeRtXUPIrPSrwOWYQ1pye4
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYxOTkyfQ.sRvJaT6eeG_qMDhFEWYQdEeRtXUPIrPSrwOWYQ1pye4
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyMDk1fQ.wtZoGRM8-eZ2Lk-Tjp_h9EwUhVTdRvr3h_SrlicX414
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyMDk1fQ.wtZoGRM8-eZ2Lk-Tjp_h9EwUhVTdRvr3h_SrlicX414
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyMTg1fQ.4h8M_IX-WHJWELGIAe3bR0s11hyrFJXYnX5d2HqylD8
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyMTg1fQ.4h8M_IX-WHJWELGIAe3bR0s11hyrFJXYnX5d2HqylD8
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyMjU5fQ.pMXGiKNIj1ijQrOowX2Ft4sMCI9EToCMUKGh1JeVSac
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyMjU5fQ.pMXGiKNIj1ijQrOowX2Ft4sMCI9EToCMUKGh1JeVSac
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyMjY3fQ.CShYIYasF9cZkmieRDvkQsaDfY1mIr1C9Rs4zYWYTtE
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyMjY3fQ.CShYIYasF9cZkmieRDvkQsaDfY1mIr1C9Rs4zYWYTtE
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyNDA1fQ.1sMsaL4g442oMgaVdSKnptMBUiKHvFLIsFhdbIZhA78
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyNDA1fQ.1sMsaL4g442oMgaVdSKnptMBUiKHvFLIsFhdbIZhA78
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyNzkyfQ.7Z-BU1MK30M01FIrHkTWp6Ml1anMhsKcZXUlDhkJZhY
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYyNzkyfQ.7Z-BU1MK30M01FIrHkTWp6Ml1anMhsKcZXUlDhkJZhY
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYzNDQ1fQ.OU6t5-0fXB8ChHF0QU-PYE5NCT60GB2aKT9DWk4JNSg
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjYzNDQ1fQ.OU6t5-0fXB8ChHF0QU-PYE5NCT60GB2aKT9DWk4JNSg
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjY0NjM0fQ.0xXFuBbozoohS0HJJMFBFHXjZglbWd8133hqmqHCZIw
+    [user] => Array
+        (
+            [id] => 4
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NCwiZXhwIjoxNzMyMjY0NjM0fQ.0xXFuBbozoohS0HJJMFBFHXjZglbWd8133hqmqHCZIw
+ID del usuario guardado en sesión: 4
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NSwiZXhwIjoxNzMyMjY0NzAzfQ.Yzvb7vwchCo28T1bFvcI-8ud_ipdccjuaVGVI4R9euA
+    [user] => Array
+        (
+            [id] => 5
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NSwiZXhwIjoxNzMyMjY0NzAzfQ.Yzvb7vwchCo28T1bFvcI-8ud_ipdccjuaVGVI4R9euA
+ID del usuario guardado en sesión: 5
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NiwiZXhwIjoxNzMyMjY0NzQ1fQ.JBAjKKydqNlmT4WxJYsDdGlf__dvFkogIFgQm89jPws
+    [user] => Array
+        (
+            [id] => 6
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NiwiZXhwIjoxNzMyMjY0NzQ1fQ.JBAjKKydqNlmT4WxJYsDdGlf__dvFkogIFgQm89jPws
+ID del usuario guardado en sesión: 6
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NywiZXhwIjoxNzMyMjY0ODE1fQ.o-wBMzN1h2Fex0dUeBiv7NvjKnyLybWjnfjy89j6Mos
+    [user] => Array
+        (
+            [id] => 7
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NywiZXhwIjoxNzMyMjY0ODE1fQ.o-wBMzN1h2Fex0dUeBiv7NvjKnyLybWjnfjy89j6Mos
+ID del usuario guardado en sesión: 7
+Redirigiendo al dashboard
+Inicio del login.php
+Inicio del login.php
+Inicio del login.php
+Inicio del login.php
+Inicio del login.php
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NiwiZXhwIjoxNzMyMjY1Mjc1fQ.PUCke4u6uyiPnuuujTqj5kyiOw5IkyRWU3_ycGs7GsU
+    [user] => Array
+        (
+            [id] => 6
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NiwiZXhwIjoxNzMyMjY1Mjc1fQ.PUCke4u6uyiPnuuujTqj5kyiOw5IkyRWU3_ycGs7GsU
+ID del usuario guardado en sesión: 6
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMjY1Mjk1fQ.VWRrCI8JQHiXZ5hl-SK60gynqAGaZpHQEbbyXJKTiw0
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMjY1Mjk1fQ.VWRrCI8JQHiXZ5hl-SK60gynqAGaZpHQEbbyXJKTiw0
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMjY2NzAzfQ.jMHys7xNFspnIFmVBGXdF3HN8ZX4DilZS9oDy2lnISs
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMjY2NzAzfQ.jMHys7xNFspnIFmVBGXdF3HN8ZX4DilZS9oDy2lnISs
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAwMDY3fQ.wOECZ7cZzPYR79w2lY6F7uuidnk9kBfFfHM2eE8ZZdE
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAwMDY3fQ.wOECZ7cZzPYR79w2lY6F7uuidnk9kBfFfHM2eE8ZZdE
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard
