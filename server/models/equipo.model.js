@@ -22,10 +22,10 @@ const equiposModel = {
     return result.rows;
   },
 
-  // Crear un nuevo equipo
   create: async (equipo) => {
-    const query = `SELECT * FROM create_equipo($1, $2, $3);`;
+    const query = `SELECT * FROM create_equipo($1, $2, $3, $4);`;
     const values = [
+      equipo.userId, // Asegúrate de que este campo esté presente en el objeto equipo
       equipo.nombreEquipo,
       equipo.representanteEquipo,
       equipo.fechaFundacion || null, // Pasar null si no hay fecha
@@ -35,9 +35,10 @@ const equiposModel = {
   },
 
   // Actualizar un equipo
-  update: async (id, equipo) => {
-    const query = `SELECT * FROM update_equipo($1, $2, $3, $4);`;
+  update: async (userId, id, equipo) => {
+    const query = `SELECT * FROM update_equipo($1, $2, $3, $4, $5);`;
     const values = [
+      userId, // Asegúrate de que este campo esté presente en el objeto equipo
       id,
       equipo.nombreEquipo,
       equipo.representanteEquipo,
@@ -47,10 +48,9 @@ const equiposModel = {
     return result.rows[0];
   },
 
-  // Eliminar un equipo
-  delete: async (id) => {
-    const query = `SELECT * FROM delete_equipo($1);`;
-    const result = await pool.query(query, [id]);
+  delete: async (userId, equipoId) => {
+    const query = `SELECT * FROM delete_equipo($1, $2);`;
+    const result = await pool.query(query, [userId, equipoId]);
     return result.rows[0];
   },
 };

@@ -16,9 +16,10 @@ const partidoModel = {
   },
 
   // Crear un nuevo partido
-  create: async (partido) => {
-    const query = `SELECT * FROM create_partido($1, $2, $3, $4, $5);`;
+  create: async (userId, partido) => {
+    const query = `SELECT * FROM create_partido($1, $2, $3, $4, $5, $6);`;
     const values = [
+      userId, // Agregar userId como primer parámetro
       partido.fechaPartido,
       partido.marcadorLocal,
       partido.marcadorVisitante,
@@ -30,9 +31,10 @@ const partidoModel = {
   },
 
   // Actualizar un partido
-  update: async (id, partido) => {
-    const query = `SELECT * FROM update_partido($1, $2, $3, $4, $5, $6);`;
+  update: async (userId, id, partido) => {
+    const query = `SELECT * FROM update_partido($1, $2, $3, $4, $5, $6, $7);`;
     const values = [
+      userId, // Agregar userId como primer parámetro
       id,
       partido.fechaPartido,
       partido.marcadorLocal,
@@ -45,9 +47,9 @@ const partidoModel = {
   },
 
   // Eliminar un partido
-  delete: async (id) => {
-    const query = `SELECT * FROM delete_partido($1);`;
-    const result = await pool.query(query, [id]);
+  delete: async (userId, partidoId) => {
+    const query = `SELECT * FROM delete_partido($1, $2);`;
+    const result = await pool.query(query, [userId, partidoId]);
     return result.rows[0];
   },
 };

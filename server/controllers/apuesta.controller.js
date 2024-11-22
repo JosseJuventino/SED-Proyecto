@@ -14,7 +14,7 @@ const apuestasController = {
         res.end(JSON.stringify(apuestas));
       }
     } catch (error) {
-      console.error("Error al obtener las apuestas:", error);
+      console.error("Error al obtener las apuestas:");
       if (!res.headersSent) {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(
@@ -49,7 +49,7 @@ const apuestasController = {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(apuesta));
     } catch (error) {
-      console.error("Error al obtener la apuesta:", error);
+      console.error("Error al obtener la apuesta:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -87,7 +87,7 @@ const apuestasController = {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(apuestas));
     } catch (error) {
-      console.error("Error al obtener las apuestas del usuario:", error);
+      console.error("Error al obtener las apuestas del usuario:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -168,7 +168,7 @@ const apuestasController = {
         })
       );
     } catch (error) {
-      console.error("Error al crear la apuesta:", error);
+      console.error("Error al crear la apuesta:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -274,7 +274,7 @@ const apuestasController = {
         })
       );
     } catch (error) {
-      console.error("Error al actualizar la apuesta:", error);
+      console.error("Error al actualizar la apuesta:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -312,7 +312,7 @@ const apuestasController = {
         })
       );
     } catch (error) {
-      console.error("Error al eliminar la apuesta:", error);
+      console.error("Error al eliminar la apuesta:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({

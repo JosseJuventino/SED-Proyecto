@@ -5,7 +5,12 @@ const loginRoutes = (req, res) => {
     loginController.login(req, res);
   } else {
     res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Ruta no encontrada" }));
+    res.end(
+      JSON.stringify({
+        success: false,
+        message: "Error",
+      })
+    );
   }
 };
 
