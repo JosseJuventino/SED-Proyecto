@@ -2,8 +2,7 @@
 ob_start();
 session_start();
 require_once __DIR__ . '/../api/authService.php';
-
-error_log("Token en sesión al cargar page.php: " . ($_SESSION['auth_token'] ?? 'No definido'));
+require_once __DIR__ . '/../api/userService.php';
 
 // Verificar si el token está presente en la sesión
 if (!isset($_SESSION['auth_token'])) {
@@ -13,23 +12,34 @@ if (!isset($_SESSION['auth_token'])) {
     exit;
 }
 
-$userService = new AuthService();
+$userService = new UserService();
+$authToken = $_SESSION['auth_token'];
 
-// Verificar el token con el servicio de autenticación
 try {
-    $authToken = $_SESSION['auth_token'];
-    $verifyResponse = $userService->verifyToken(['token' => $authToken]);
-    error_log("Respuesta de verifyToken: " . print_r($verifyResponse, true));
-
-    // Validar la respuesta de verificación del token
-    if (isset($verifyResponse['error']) && $verifyResponse['error']) {
+    // Verificar el token con el servicio de autenticación
+    $authResponse = (new AuthService())->verifyToken(['token' => $authToken]);
+    if (isset($authResponse['error']) && $authResponse['error']) {
         error_log("Token inválido o expirado. Redirigiendo al login.");
         session_destroy();
         header('Location: ../index.php');
         exit;
     }
+
+    // Obtener los datos del usuario a partir de su ID
+    $userId = $_SESSION['user_id'];
+    $userData = $userService->getUserById($userId);
+    $userRole = $userData['rol'] ?? null; // Suponiendo que el rol está en el campo 'rol'
+
+    // Validar el rol
+    if ($userRole !== 'admin' && $userRole !== 'superadmin') {
+        error_log("Acceso denegado para el usuario con rol: $userRole. Redirigiendo.");
+        session_destroy();
+        header('Location: ../index.php');
+        exit;
+    }
+
 } catch (Exception $e) {
-    error_log("Error al verificar el token: " . $e->getMessage());
+    error_log("Error al procesar la autenticación: " . $e->getMessage());
     session_destroy();
     header('Location: ../index.php');
     exit;

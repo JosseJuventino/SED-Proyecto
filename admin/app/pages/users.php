@@ -1,3 +1,37 @@
+<?php
+// Verificar si la sesión ya está activa
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Ruta ajustada al archivo userService.php
+require_once __DIR__ . '/../../api/userService.php';
+
+// Verificar si el usuario tiene acceso a esta página
+$userService = new UserService();
+
+try {
+    $userId = $_SESSION['user_id'] ?? null;
+    if (!$userId) {
+        throw new Exception("Usuario no autenticado");
+    }
+
+    $userData = $userService->getUserById($userId);
+    $userRole = $userData['rol'] ?? null;
+
+    // Validar que el usuario tenga rol de admin o superadmin
+    if ($userRole !== 'admin' && $userRole !== 'superadmin') {
+        header('Location: ../index.php');
+        exit;
+    }
+} catch (Exception $e) {
+    error_log("Error al validar usuario: " . $e->getMessage());
+    header('Location: ../index.php');
+    exit;
+}
+?>
+
+
 <main class="flex-1 p-0">
     <header class="flex justify-between items-center mb-8">
         <h1 class="text-2xl font-bold">User Management</h1>

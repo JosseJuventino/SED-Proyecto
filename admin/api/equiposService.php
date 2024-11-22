@@ -1,9 +1,7 @@
 <?php
-
 require_once 'ApiService.php';
 
 class EquipoService extends ApiService {
-    
     private $userId;
     private $authToken;
 
@@ -17,55 +15,90 @@ class EquipoService extends ApiService {
         }
     }
 
-    // Crear un nuevo equipo
     public function createEquipo($nombreEquipo, $representanteEquipo) {
         $data = [
-            'userId' => $this->userId,
+            'userId' => $this->userId, // ID del usuario logueado
             'nombreEquipo' => $nombreEquipo,
             'representanteEquipo' => $representanteEquipo,
-            'token' => $this->authToken // Incluir el token aquí
         ];
 
-        return $this->post('/equipo', $data);
+        // Encabezados con el token
+        $headers = [
+            "Authorization: Bearer {$this->authToken}", // Token de autenticación
+        ];
+
+        // Realizar la solicitud POST
+        $response = $this->post('/equipo', $data, $headers);
+
+        // Mostrar la respuesta en consola
+        error_log("[CREATE EQUIPO RESPONSE] " . json_encode($response, JSON_PRETTY_PRINT));
+
+        return $response;
     }
 
-    // Actualizar los detalles de un equipo
     public function updateEquipo($idEquipo, $nombreEquipo, $representanteEquipo) {
         $data = [
             'userId' => $this->userId,
             'nombreEquipo' => $nombreEquipo,
             'representanteEquipo' => $representanteEquipo,
-            'token' => $this->authToken // Incluir el token aquí
         ];
 
-        return $this->post("/equipo/{$idEquipo}", $data); // Simular PUT con POST
-    }
-
-    // Obtener un equipo por su ID
-    public function getEquipoById($idEquipo) {
-        $data = [
-            'token' => $this->authToken // Incluir el token aquí
+        // Encabezados con el token
+        $headers = [
+            "Authorization: Bearer {$this->authToken}", // Token de autenticación
         ];
 
-        return $this->get("/equipo/{$idEquipo}", $data);
+        $response = $this->post("/equipo/{$idEquipo}", $data, $headers);
+
+        // Mostrar la respuesta en consola
+        error_log("[UPDATE EQUIPO RESPONSE] " . json_encode($response, JSON_PRETTY_PRINT));
+
+        return $response;
     }
 
-    // Obtener todos los equipos
     public function getAllEquipos() {
-        $data = [
-            'token' => $this->authToken // Incluir el token aquí
+        // Encabezados con el token
+        $headers = [
+            "Authorization: Bearer {$this->authToken}", // Token de autenticación
         ];
 
-        return $this->get('/equipo', $data);
+        $response = $this->get('/equipo', ['token' => $this->authToken], $headers);
+
+        // Mostrar la respuesta en consola
+        error_log("[GET ALL EQUIPOS RESPONSE] " . json_encode($response, JSON_PRETTY_PRINT));
+
+        return $response;
     }
 
-    // Eliminar un equipo
+    public function getEquipoById($idEquipo) {
+        // Encabezados con el token
+        $headers = [
+            "Authorization: Bearer {$this->authToken}", // Token de autenticación
+        ];
+
+        $response = $this->get("/equipo/{$idEquipo}", ['token' => $this->authToken], $headers);
+
+        // Mostrar la respuesta en consola
+        error_log("[GET EQUIPO BY ID RESPONSE] " . json_encode($response, JSON_PRETTY_PRINT));
+
+        return $response;
+    }
+
     public function deleteEquipo($idEquipo) {
         $data = [
-            'token' => $this->authToken, // Incluir el token aquí
-            '_method' => 'DELETE' // Simular DELETE con POST si la API lo permite
+            '_method' => 'DELETE', // Simular DELETE con POST
         ];
 
-        return $this->post("/equipo/{$idEquipo}", $data);
+        // Encabezados con el token
+        $headers = [
+            "Authorization: Bearer {$this->authToken}", // Token de autenticación
+        ];
+
+        $response = $this->post("/equipo/{$idEquipo}", $data, $headers);
+
+        // Mostrar la respuesta en consola
+        error_log("[DELETE EQUIPO RESPONSE] " . json_encode($response, JSON_PRETTY_PRINT));
+
+        return $response;
     }
 }

@@ -393,3 +393,68 @@ Respuesta del servicio: Array
 Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAxMjI4fQ.IXY3p9ixNjS_Pi0-v4u-bXwlIJUmJfLnkgo34TzLGZo
 ID del usuario guardado en sesión: 2
 Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAxODQ3fQ.1-D6jCYD6RjC0pLnWJnPYoXqYltG2NCXr7niAjS8SzY
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAxODQ3fQ.1-D6jCYD6RjC0pLnWJnPYoXqYltG2NCXr7niAjS8SzY
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAyNTMwfQ.ClY8dw6cOybhTHq58or_GmTuVEN-HwOb9a4BC3w5uN4
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAyNTMwfQ.ClY8dw6cOybhTHq58or_GmTuVEN-HwOb9a4BC3w5uN4
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAzMTU3fQ.TyX1D6-NVi4Hpn9ZZ8U7n0OJIkXKdbfx86zYJ12nNwA
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAzMTU3fQ.TyX1D6-NVi4Hpn9ZZ8U7n0OJIkXKdbfx86zYJ12nNwA
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAzODQ4fQ.2Zxl5EZIfPKvP_Es0gQtR8hVwBdSjwcCdpYaatswH6g
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAzODQ4fQ.2Zxl5EZIfPKvP_Es0gQtR8hVwBdSjwcCdpYaatswH6g
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzA4NTE3fQ.RMVrmJvEuEtQSeboD1-tKJw_J3aky_yMya2V737_IG4
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzA4NTE3fQ.RMVrmJvEuEtQSeboD1-tKJw_J3aky_yMya2V737_IG4
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard

@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $equipoService->deleteEquipo($idEquipo);
         }
 
-        // Redirigir para evitar reenvíos del formulario
         header('Location: ' . $_SERVER['PHP_SELF']);
         exit;
     } catch (Exception $e) {
@@ -65,15 +64,6 @@ try {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/public/css/styles.css">
-    <title>Teams Management</title>
-</head>
-<body>
 <main class="flex-1 p-0">
     <header class="flex justify-between items-center mb-8">
         <h1 class="text-2xl font-bold">Teams Management</h1>
@@ -127,33 +117,67 @@ try {
         </table>
     </div>
 </main>
+<!-- Modal para Agregar Equipo -->
+<div id="addTeamModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-black rounded-lg shadow-lg w-full max-w-md p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Add New Team</h2>
+        <form id="addTeamForm" method="POST">
+            <input type="hidden" name="action" value="create">
+            <div class="mb-4">
+                <label for="teamName" class="block text-sm font-medium text-gray-700">Team Name</label>
+                <input type="text" id="teamName" name="teamName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="representative" class="block text-sm font-medium text-gray-700">Representative</label>
+                <input type="text" id="representative" name="representative" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="button" class="cancel-add-btn px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Add Team</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-<!-- JavaScript para acciones de los botones -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const addTeamBtn = document.getElementById('addTeamBtn');
-        const teamsTableBody = document.getElementById('teamsTableBody');
+<!-- Modal para Editar Equipo -->
+<div id="editTeamModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-black rounded-lg shadow-lg w-full max-w-md p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Edit Team</h2>
+        <form id="editTeamForm" method="POST">
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" id="editTeamId" name="teamId">
+            <div class="mb-4">
+                <label for="editTeamName" class="block text-sm font-medium text-gray-700">Team Name</label>
+                <input type="text" c id="editTeamName" name="teamName" required class="mt-1 bg-black block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="editRepresentative" class="block text-sm font-medium text-gray-700">Representative</label>
+                <input type="text" id="editRepresentative" name="representative" required class="mt-1 block w-full bg-black rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="button" class="cancel-edit-btn px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-        // Manejar el botón para agregar un equipo
-        addTeamBtn.addEventListener('click', () => {
-            // Lógica para mostrar el modal de agregar equipo
-        });
+<!-- Modal para Confirmar Eliminación -->
+<!-- Modal para Confirmar Eliminación -->
+<div id="deleteConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-black rounded-lg shadow-lg w-full max-w-md p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Delete Team</h2>
+        <p class="text-gray-600 mb-6">Are you sure you want to delete this team? This action cannot be undone.</p>
+        <form id="deleteTeamForm" method="POST">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" id="deleteTeamId" name="teamId">
+            <div class="flex justify-end space-x-4">
+                <button type="button" class="cancel-delete-btn px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                <button type="button" id="confirmDeleteBtn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-        // Manejar los botones de editar y eliminar
-        teamsTableBody.addEventListener('click', (e) => {
-            if (e.target.classList.contains('edit-btn')) {
-                const id = e.target.getAttribute('data-id');
-                const name = e.target.getAttribute('data-name');
-                const representative = e.target.getAttribute('data-representative');
-                // Lógica para mostrar el modal de edición con datos cargados
-            }
+<script src="/public/js/renderteam.js"></script>
 
-            if (e.target.classList.contains('delete-btn')) {
-                const id = e.target.getAttribute('data-id');
-                // Confirmar y enviar el formulario de eliminación
-            }
-        });
-    });
-</script>
-</body>
-</html>
