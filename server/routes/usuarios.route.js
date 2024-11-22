@@ -40,7 +40,12 @@ const usuariosRoutes = async (req, res) => {
   } else {
     // Ruta no encontrada
     res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Ruta no encontrada" }));
+    res.end(
+      JSON.stringify({
+        success: false,
+        message: "Error",
+      })
+    );
   }
 };
 

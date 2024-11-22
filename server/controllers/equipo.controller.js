@@ -49,7 +49,7 @@ const equiposController = {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(equipo));
     } catch (error) {
-      "Error al obtener el equipo:", error;
+      console.error("Error al obtener el equipo:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({ success: false, error: "Error al obtener el equipo" })
@@ -73,7 +73,7 @@ const equiposController = {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(equipo));
     } catch (error) {
-      "Error al obtener el equipo:", error;
+      console.error("Error al obtener el equipo:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({ success: false, error: "Error al obtener el equipo" })
@@ -85,6 +85,19 @@ const equiposController = {
     try {
       const equipo = await parseBody(req);
 
+      // Asegúrate de que el userId esté presente en el cuerpo de la solicitud
+      if (!equipo.userId) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+            error: "El user es obligatorio",
+          })
+        );
+        return;
+      }
+
+      // Validación del nombre del equipo
       if (!equipo.nombreEquipo || !isValidNombreEquipo(equipo.nombreEquipo)) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(
@@ -96,6 +109,7 @@ const equiposController = {
         return;
       }
 
+      // Validación del representante del equipo
       if (
         !equipo.representanteEquipo ||
         !isValidRepresentante(equipo.representanteEquipo)
@@ -110,6 +124,7 @@ const equiposController = {
         return;
       }
 
+      // Crear el equipo en la base de datos
       await equiposModel.create(equipo);
       res.writeHead(201, { "Content-Type": "application/json" });
       res.end(
@@ -119,7 +134,7 @@ const equiposController = {
         })
       );
     } catch (error) {
-      "Error al crear el equipo:", error;
+      console.error("Error al crear el equipo:"); // Asegúrate de imprimir el error
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({ success: false, error: "Error al crear el equipo" })
@@ -130,6 +145,7 @@ const equiposController = {
   update: async (req, res) => {
     const id = req.params.id;
 
+    // Validar el ID del equipo
     if (!isValidNumericId(id)) {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ success: false, error: "ID inválido" }));
@@ -137,8 +153,21 @@ const equiposController = {
     }
 
     try {
+      // Analiza el cuerpo de la solicitud
       const equipo = await parseBody(req);
 
+      const userId = equipo.userId; // Asegúrate de que el userId esté en el cuerpo de la solicitud
+
+      // Validar el userId
+      if (!userId) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: false, error: "El userId es obligatorio" })
+        );
+        return;
+      }
+
+      // Validación del nombre del equipo
       if (equipo.nombreEquipo && !isValidNombreEquipo(equipo.nombreEquipo)) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(
@@ -150,6 +179,7 @@ const equiposController = {
         return;
       }
 
+      // Validación del representante del equipo
       if (
         equipo.representanteEquipo &&
         !isValidRepresentante(equipo.representanteEquipo)
@@ -164,7 +194,9 @@ const equiposController = {
         return;
       }
 
-      const updatedEquipo = await equiposModel.update(id, equipo);
+      // Actualizar el equipo en la base de datos
+      const updatedEquipo = await equiposModel.update(userId, id, equipo);
+
       if (!updatedEquipo) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(
@@ -181,7 +213,7 @@ const equiposController = {
         })
       );
     } catch (error) {
-      "Error al actualizar el equipo:", error;
+      console.error("Error al actualizar el equipo:"); // Asegúrate de imprimir el error
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
@@ -192,17 +224,33 @@ const equiposController = {
     }
   },
 
+  // En tu controlador (equipo.controller.js)
   delete: async (req, res) => {
-    const id = req.params.id;
+    const equipoId = req.params.id; // ID del equipo a eliminar
 
-    if (!isValidNumericId(id)) {
+    // Validar el ID del equipo
+    if (!isValidNumericId(equipoId)) {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ success: false, error: "ID inválido" }));
       return;
     }
 
     try {
-      const deletedEquipo = await equiposModel.delete(id);
+      // Analizar el cuerpo de la solicitud para obtener userId
+      const body = await parseBody(req);
+      const userId = body.userId; // Asegúrate de que el userId esté en el cuerpo de la solicitud
+
+      // Validar el userId
+      if (!userId) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ success: false, error: "El userId es obligatorio" })
+        );
+        return;
+      }
+
+      // Llamar al modelo para eliminar el equipo
+      const deletedEquipo = await equiposModel.delete(userId, equipoId);
       if (!deletedEquipo) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(
@@ -219,7 +267,7 @@ const equiposController = {
         })
       );
     } catch (error) {
-      "Error al eliminar el equipo:", error;
+      console.error("Error al eliminar el equipo:"); // Asegúrate de imprimir el error
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({ success: false, error: "Error al eliminar el equipo" })

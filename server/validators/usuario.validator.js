@@ -16,9 +16,15 @@ const isValidDUI = (dui) => {
   return duiRegex.test(dui);
 };
 
+// Valida si el ID es un número entero válido
+const isValidNumericId = (id) => {
+  return Number.isInteger(Number(id)) && Number(id) > 0;
+};
+
 // Exportar los validadores
 module.exports = {
   isValidEmail,
   isValidText,
   isValidDUI,
+  isValidNumericId,
 };

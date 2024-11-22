@@ -2,6 +2,7 @@ const equipoController = require("../controllers/equipo.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 
 const equipoRoutes = async (req, res) => {
+
   // Función para aplicar el middleware de autenticación
   const applyAuthMiddleware = async (handler) => {
     try {
@@ -10,8 +11,7 @@ const equipoRoutes = async (req, res) => {
         await handler(req, res); // Ejecutar el controlador si pasa la autenticación
       }
     } catch (error) {
-      // Manejo de errores inesperados (opcional)
-      "Error en applyAuthMiddleware:", error;
+      console.error("Error en applyAuthMiddleware:", error);
       if (!res.headersSent) {
         res.statusCode = 500;
         res.setHeader("Content-Type", "application/json");
@@ -31,8 +31,7 @@ const equipoRoutes = async (req, res) => {
     req.url.match(/^\/equipo\/nombre\/[a-zA-Z0-9_ ]+$/) &&
     req.method === "GET"
   ) {
-    // Ruta para obtener un equipo por nombre
-    const nombre = req.url.split("/")[3]; // Nombre del equipo desde la URL
+    const nombre = req.url.split("/")[3];
     req.params = { nombre };
     await applyAuthMiddleware((req, res) =>
       equipoController.getByName(req, res)
@@ -48,9 +47,13 @@ const equipoRoutes = async (req, res) => {
     req.params = { id };
     await applyAuthMiddleware((req, res) => equipoController.delete(req, res));
   } else {
-    // Ruta no encontrada
     res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Ruta no encontrada" }));
+    res.end(
+      JSON.stringify({
+        success: false,
+        message: "Error",
+      })
+    );
   }
 };
 

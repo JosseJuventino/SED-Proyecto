@@ -1,4 +1,3 @@
-// controllers/loginController.js
 const usuariosModel = require("../models/usuarios.model");
 const bcrypt = require("bcrypt");
 const { SignJWT } = require("jose");
@@ -32,7 +31,7 @@ const loginController = {
 
         // Buscar al usuario por email
         const user = await usuariosModel.getByEmail(email);
-        "Usuario encontrado:", user;
+        console.log("Usuario encontrado");
 
         if (!user) {
           res.writeHead(401, { "Content-Type": "application/json" });
@@ -41,7 +40,7 @@ const loginController = {
         }
 
         if (!user.clave) {
-          ("La contraseña del usuario está vacía");
+          console.error("La contraseña del usuario está vacía");
           res.writeHead(500, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "Error en el servidor" }));
           return;
@@ -57,7 +56,7 @@ const loginController = {
         }
 
         // Generar JWT
-        const jwt = await new SignJWT({ id: user.idUsuario, email: user.email })
+        const jwt = await new SignJWT({ id: user.idusuario })
           .setProtectedHeader({ alg: "HS256" })
           .setExpirationTime("10m")
           .sign(Buffer.from(SECRET_KEY, "utf-8"));
@@ -66,18 +65,18 @@ const loginController = {
         res.end(
           JSON.stringify({
             token: jwt,
-            user: { id: user.idUsuario, email: user.email },
+            user: { id: user.idusuario },
           })
         );
       } catch (error) {
-        "Error en el controlador de login:", error;
+        console.error("Error en el controlador de login:");
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Error en el servidor" }));
       }
     });
 
     req.on("error", (err) => {
-      "Error en la solicitud:", err;
+      console.error("Error en la solicitud:");
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Error en la solicitud" }));
     });
