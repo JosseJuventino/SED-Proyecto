@@ -39,15 +39,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'betQuantity' => $betQuantity,
     ];
 
-    $apiUrl = 'https://url-de-la-api/api/login'; // Cambiar por la URL de la API
+    $apiUrl = 'https://proyecto-sed.ironcity.cloud/apuesta'; // Cambiar por la URL de la API
 
+    // Obtener el token de la sesión
+    $token = $_SESSION['token'] ?? '';
     $options = [
         'http' => [
             'method' => 'POST',
             'header' => "Content-Type: application/json\r\n" .
-                "Accept: application/json\r\n",
+                "Accept: application/json\r\n" .    
+                "Authorization: Bearer $token",
+            
             'content' => json_encode($postData),
-            'ignore_errors' => true, // Permite capturar errores HTTP
+            'ignore_errors' => true,
+            
+            // Permite capturar errores HTTP
         ],
     ];
 

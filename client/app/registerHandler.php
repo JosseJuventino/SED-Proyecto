@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userName = htmlspecialchars(trim($_POST['userName'] ?? ''), ENT_QUOTES, 'UTF-8');
     $email = htmlspecialchars(trim($_POST['email'] ?? ''), ENT_QUOTES, 'UTF-8');
     $password = $_POST['clave'] ?? '';
+    $Dui = $_POST['dui'] ?? '00000000-0';
 
     if (empty($nombreUsuario) || empty($apellidoUsuario) || empty($userName) || empty($email) || empty($password)) {
         $errors[] = "Todos los campos son obligatorios.";
@@ -59,21 +60,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $postData = [
         'nombreUsuario' => $nombreUsuario,
         'apellidoUsuario' => $apellidoUsuario,
+        'dui' => $Dui,
         'userName' => $userName,
         'email' => $email,
-        'password' => $password,
+        'clave' => $password,
+        'idRol' => 1,
     ];
 
-    $apiUrl = 'https://url-de-la-api/api/login'; // Cambiar por la URL de la API
+    $apiUrl = 'https://proyecto-sed.ironcity.cloud/usuarios'; // Cambiar por la URL de la API
 
+    
+    $token = $_SESSION['token'] ?? '';
     $options = [
         'http' => [
             'method' => 'POST',
             'header' => "Content-Type: application/json\r\n" .
-                "Accept: application/json\r\n",
+                "Accept: application/json\r\n" .
+                "Authorization" . $_SESSION['token'],
+                
             'content' => json_encode($postData),
             'ignore_errors' => true, // Permite capturar errores HTTP
-        ],
+        ]
     ];
 
     // Crear un contexto de flujo
@@ -103,12 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Procesar la respuesta de la API
     $responseData = json_decode($response, true);
 
-    if ($httpCode === 200 && isset($responseData['success']) && $responseData['success'] === true) {
+
+
+    if ($httpCode === 201) {
         session_start();
         $_SESSION['token'] = $responseData['data']['token'];
         header('Location: ../index.php');
         exit;
-    } else {
+    } else {        
         $errors[] = "Error al iniciar sesión: " . ($responseData['message'] ?? 'Error desconocido');
         $_SESSION['errors'] = $errors;
         header('Location: register.php');

@@ -9,7 +9,18 @@
 </head>
 
 <body class="text-white bg-black">
-    <?php session_start(); ?>
+    <?php
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    // Verificar que el usuario está logueado
+    if (!isset($_SESSION['token']) || !isset($_SESSION['user_id'])) {
+        error_log('$token: ' . $_SESSION['token'] . ', $user_id: ' . $_SESSION['user_id']);
+        header('Location: ../../../index.php');
+        exit;
+    }
+    ?>
     <div class="mx-10 my-5">
         <?php include '../../../components/header.php'; ?>
 
