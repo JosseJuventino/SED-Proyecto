@@ -1,5 +1,3 @@
-# Ignorar dependencias de Composer
-/vendor/
 
 # Ignorar configuraciones locales
 .env
