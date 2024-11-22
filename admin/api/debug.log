@@ -367,3 +367,29 @@ Respuesta del servicio: Array
 Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAwMDY3fQ.wOECZ7cZzPYR79w2lY6F7uuidnk9kBfFfHM2eE8ZZdE
 ID del usuario guardado en sesión: 2
 Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAwNjA0fQ.u2wEkRoqjoMqdZNA5gPfdkKD_DN3dCvrJQJgJ2Soalk
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAwNjA0fQ.u2wEkRoqjoMqdZNA5gPfdkKD_DN3dCvrJQJgJ2Soalk
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard
+Inicio del login.php
+Respuesta del servicio: Array
+(
+    [token] => eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAxMjI4fQ.IXY3p9ixNjS_Pi0-v4u-bXwlIJUmJfLnkgo34TzLGZo
+    [user] => Array
+        (
+            [id] => 2
+        )
+
+)
+Token guardado en sesión: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNzMyMzAxMjI4fQ.IXY3p9ixNjS_Pi0-v4u-bXwlIJUmJfLnkgo34TzLGZo
+ID del usuario guardado en sesión: 2
+Redirigiendo al dashboard

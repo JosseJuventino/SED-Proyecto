@@ -1,0 +1,155 @@
+Respuesta de getAllEquipos:
+Array
+(
+    [error] => 1
+    [status] => 404
+    [message] => Error
+)
+Respuesta de getAllEquipos:
+Array
+(
+    [error] => 1
+    [status] => 404
+    [message] => Error
+)
+Respuesta de getAllEquipos:
+Array
+(
+    [error] => 1
+    [status] => 404
+    [message] => Error
+)
+Respuesta de getAllEquipos:
+Array
+(
+    [error] => 1
+    [status] => 404
+    [message] => Error
+)
+Respuesta de getAllEquipos:
+Array
+(
+    [error] => 1
+    [status] => 404
+    [message] => Error
+)
+Respuesta de getAllEquipos:
+Array
+(
+    [0] => Array
+        (
+            [idequipo] => 3
+            [nombreequipo] => FC Barcelona
+            [representanteequipo] => Meguru Bachira
+            [fechafundacion] => 2024-11-19T00:00:00.000Z
+        )
+
+    [1] => Array
+        (
+            [idequipo] => 4
+            [nombreequipo] => Equipo Nuevo
+            [representanteequipo] => Juan Pérez
+            [fechafundacion] => 2024-01-01T00:00:00.000Z
+        )
+
+    [2] => Array
+        (
+            [idequipo] => 6
+            [nombreequipo] => Equipo XYZ
+            [representanteequipo] => John Doe
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+    [3] => Array
+        (
+            [idequipo] => 7
+            [nombreequipo] => Equipo Ejemplo
+            [representanteequipo] => Representante Ejemplo
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+    [4] => Array
+        (
+            [idequipo] => 9
+            [nombreequipo] => NuevoEquipo
+            [representanteequipo] => Yoceman
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+    [5] => Array
+        (
+            [idequipo] => 10
+            [nombreequipo] => Madrid
+            [representanteequipo] => Joss
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+    [6] => Array
+        (
+            [idequipo] => 11
+            [nombreequipo] => ElPEPE
+            [representanteequipo] => Joss
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+)
+Respuesta de getAllEquipos:
+Array
+(
+    [0] => Array
+        (
+            [idequipo] => 3
+            [nombreequipo] => FC Barcelona
+            [representanteequipo] => Meguru Bachira
+            [fechafundacion] => 2024-11-19T00:00:00.000Z
+        )
+
+    [1] => Array
+        (
+            [idequipo] => 4
+            [nombreequipo] => Equipo Nuevo
+            [representanteequipo] => Juan Pérez
+            [fechafundacion] => 2024-01-01T00:00:00.000Z
+        )
+
+    [2] => Array
+        (
+            [idequipo] => 6
+            [nombreequipo] => Equipo XYZ
+            [representanteequipo] => John Doe
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+    [3] => Array
+        (
+            [idequipo] => 7
+            [nombreequipo] => Equipo Ejemplo
+            [representanteequipo] => Representante Ejemplo
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+    [4] => Array
+        (
+            [idequipo] => 9
+            [nombreequipo] => NuevoEquipo
+            [representanteequipo] => Yoceman
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+    [5] => Array
+        (
+            [idequipo] => 10
+            [nombreequipo] => Madrid
+            [representanteequipo] => Joss
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+    [6] => Array
+        (
+            [idequipo] => 11
+            [nombreequipo] => ElPEPE
+            [representanteequipo] => Joss
+            [fechafundacion] => 2024-11-21T00:00:00.000Z
+        )
+
+)
