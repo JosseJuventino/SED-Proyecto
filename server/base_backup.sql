@@ -1279,9 +1279,9 @@ COPY public.partido (idpartido, fechapartido, marcadorlocal, marcadorvisitante, 
 --
 
 COPY public.roles (idrol, tiporol) FROM stdin;
-2	usuario
-3	admin
-4	superadmin
+1	usuario
+2	admin
+3	superadmin
 \.
 
 
@@ -1290,9 +1290,7 @@ COPY public.roles (idrol, tiporol) FROM stdin;
 --
 
 COPY public.usuarios (idusuario, nombreusuario, apellidousuario, dui, email, username, clave, puntosuser, idrol) FROM stdin;
-27	papadioss	davicito	12345678-9	davicito@gmail.com	sosa1	$2b$10$0q0S1zGVcSWxLdFjRtwksuFCT1OP9nZFxKbRQr7KCE67YZcAGcmZG	0	2
-31	superadmin	super	12345678-9	superadmin@gmail.com	superadmin	$2b$10$YpY0f//yhFcziNeqzQU6jehzZHnZOXczZRj7Iolxu90GSSOl1zMlW	0	4
-28	adminUser	pepe	12345678-9	pepe@gmail.com	sosa12	$2b$10$7yUc/XGy6pp0yxSQtZ4JnevEI/OctM9r6ZggA1u66M5OBzEarf29O	0	3
+1	awita	elpepe	12345678-9	awas@gmail.com	awitamilgracias	$2b$10$S9V4blPrAc2cxhYaLm4Y7u35nMmPcNyqvP48WrmbnRQN2bLp1FjLi	0	2
 \.
 
 
@@ -1300,7 +1298,7 @@ COPY public.usuarios (idusuario, nombreusuario, apellidousuario, dui, email, use
 -- Name: apuestas_idapuestas_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.apuestas_idapuestas_seq', 19, true);
+SELECT pg_catalog.setval('public.apuestas_idapuestas_seq', 1, false);
 
 
 --
@@ -1328,14 +1326,14 @@ SELECT pg_catalog.setval('public.partido_idpartido_seq', 17, true);
 -- Name: roles_idrol_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.roles_idrol_seq', 4, true);
+SELECT pg_catalog.setval('public.roles_idrol_seq', 3, true);
 
 
 --
 -- Name: usuarios_idusuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.usuarios_idusuario_seq', 36, true);
+SELECT pg_catalog.setval('public.usuarios_idusuario_seq', 1, true);
 
 
 --
