@@ -1,4 +1,5 @@
 <?php
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_start();
     $errors = [];
@@ -29,61 +30,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $postData = [
-        'searchTerm' => $sanitizedSearchTerm,
-    ];
+    $_SESSION['searchTerm'] = $sanitizedSearchTerm;
+}
 
-    $apiUrl = 'https://url-de-la-api/api/buscador'; // Cambiar por la URL de la API
 
-    $options = [
-        'http' => [
-            'method' => 'POST',
-            'header' => "Content-Type: application/json\r\n" .
-                "Accept: application/json\r\n",
-            'content' => json_encode($postData),
-            'ignore_errors' => true, // Permite capturar errores HTTP
-        ],
-    ];
+require_once 'apiService.php';
 
-    // Crear un contexto de flujo
-    $context = stream_context_create($options);
+class EquipoService extends ApiService {
+    
+    private $userId;
+    private $authToken;
 
-    // Realizar la solicitud con file_get_contents
-    $response = file_get_contents($apiUrl, false, $context);
+    public function __construct($apiUrl, $userId) {
+        parent::__construct($apiUrl); // Llamar al constructor de ApiService
+        $this->userId = $userId;
+        $this->authToken = $_SESSION['token'] ?? null;
 
-    // Obtener el código de respuesta HTTP
-    $httpCode = null;
-    if (isset($http_response_header)) {
-        foreach ($http_response_header as $header) {
-            if (preg_match('#^HTTP/\d+\.\d+\s+(\d+)#', $header, $matches)) {
-                $httpCode = intval($matches[1]);
-                break;
-            }
+        if (!$this->authToken) {
+            throw new Exception("Error: No se encontró el token de autenticación en la sesión.");
         }
     }
 
-    // Verificar si la solicitud fue exitosa
-    if ($response === false) {
-        echo "Error en la solicitud.";
-        header('Location: page.php');
-        exit;
-    }
+    // Obtener un equipo por su ID
+    public function getEquipoById($equipoName) {
+        $data = [
+            'token' => $this->authToken // Incluir el token aquí
+        ];
 
-    // Procesar la respuesta de la API
-    $responseData = json_decode($response, true);
-
-    if ($httpCode === 200 && isset($responseData['success']) && $responseData['success'] === true) {
-        header('Location: page.php');
-        exit;
-    } else {
-        $errors[] = "Error al iniciar sesión: " . ($responseData['message'] ?? 'Error desconocido');
-        $_SESSION['errors'] = $errors;
-        header('Location: page.php');
-        exit;
+        return $this->get("/equipo/nombre/{$equipoName}", $data);
     }
-} else {
-    // Si no es una solicitud POST, redirigir o mostrar un mensaje de error
-    header('HTTP/1.1 405 Method Not Allowed');
-    echo "Método no permitido.";
-    exit;
+    public function getAllEquipos() {
+        $data = [
+            'token' => $this->authToken // Incluir el token aquí
+        ];
+
+        return $this->get('/equipo', $data);
+    }
 }

@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];   // Array para almacenar los errores
     $username = htmlspecialchars(trim($_POST['username'] ?? ''), ENT_QUOTES, 'UTF-8');
-    $password = htmlspecialchars(trim($_POST['password'] ?? ''), ENT_QUOTES, 'UTF-8');
+    $password = trim($_POST['password'] ?? '');
 
 
 
@@ -13,11 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "El nombre de usuario y la contraseña son obligatorios.";
     }
 
-    if (!preg_match('/^[a-zA-Z0-9_\-]{3,50}$/', $username)) {
-        $errors[] = "El nombre de usuario solo puede contener letras, números, guiones y guiones bajos.";
+    if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "El correo electrónico no es válido.";
     }
 
-    if (strlen($password) < 8) {
+
+    if (strlen($password) < 7) {
         $errors[] = "La contraseña debe tener al menos 8 caracteres.";
     }
 
@@ -33,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     $postData = [
-        'username' => $username,
+        'email' => $username,
         'password' => $password,
     ];
 
-    $apiUrl = 'https://url-de-la-api/api/login'; // Cambiar por la URL de la API
+    $apiUrl = 'https://proyecto-sed.ironcity.cloud/login'; // Cambiar por la URL de la API
     
     $options = [
         'http' => [
@@ -76,13 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Procesar la respuesta de la API
     $responseData = json_decode($response, true);
 
-    if ($httpCode === 200 && isset($responseData['success']) && $responseData['success'] === true) {
+    if ($httpCode === 200 && isset($responseData['token'])) {
         session_start();
-        $_SESSION['token'] = $responseData['data']['token'];
+        $_SESSION['token'] = $responseData['token'];
+        error_log('token: ' . $responseData['token'] . ' - ' . $_COOKIE['token']);
+        $_SESSION['user_id'] = $responseData['user']['id'];
         header('Location: ./dashboard/page.php');
         exit;
     } else {
-        $errors[] = "Error al iniciar sesión: " . ($responseData['message'] ?? 'Error desconocido');
+        error_log(print_r($responseData, true));
+        $errors[] = "Error al iniciar sesión: " . ($responseData['error'] ?? 'Error desconocido');
         $_SESSION['errors'] = $errors;
         header('Location: ../index.php');
         exit;

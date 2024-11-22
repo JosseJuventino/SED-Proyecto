@@ -1,44 +1,30 @@
 <?php
-// Datos de ejemplo para equipos
-$teams = [
-    [
-        "name" => "Paris Saint-Germain",
-        "founded" => 1970,
-        "captain" => "Marquinhos",
-        "stadium" => "Parc des Princes",
-        "league" => "Ligue 1",
-        "logo" => "https://via.placeholder.com/100",
-    ],
-    [
-        "name" => "Real Madrid",
-        "founded" => 1902,
-        "captain" => "Nacho",
-        "stadium" => "Santiago Bernabéu",
-        "league" => "La Liga",
-        "logo" => "https://via.placeholder.com/100",
-    ],
-    [
-        "name" => "Manchester City",
-        "founded" => 1880,
-        "captain" => "Kyle Walker",
-        "stadium" => "Etihad Stadium",
-        "league" => "Premier League",
-        "logo" => "https://via.placeholder.com/100",
-    ],
-];
+// Incluir dependencias necesarias
+require_once __DIR__ . './../app/dashboard/teams/searchTeams.php';
+// Instanciar el servicio de equipos
+$apiUrl = getenv('API_BASE_URL') ?: ($_ENV['API_BASE_URL'] ?? null);
+$userId = $_SESSION['user_id'];
+$equipoService = new EquipoService($apiUrl, $userId);
 
-// Sanitización de datos
-$teams = array_map(function ($team) {
-    return [
-        "name" => htmlspecialchars($team["name"], ENT_QUOTES, "UTF-8"),
-        "founded" => (int)$team["founded"],
-        "captain" => htmlspecialchars($team["captain"], ENT_QUOTES, "UTF-8"),
-        "stadium" => htmlspecialchars($team["stadium"], ENT_QUOTES, "UTF-8"),
-        "league" => htmlspecialchars($team["league"], ENT_QUOTES, "UTF-8"),
-        "logo" => filter_var($team["logo"], FILTER_VALIDATE_URL) ? $team["logo"] : "https://via.placeholder.com/100",
-    ];
-}, $teams);
-
+// Archivo de log para depuración
+$logFile = __DIR__ . '/../../error.log';
+$equipos = [];
+if(isset($_SESSION['searchTerm'])) {
+    try {
+        $equipos = $equipoService->getEquipoById();
+        file_put_contents($logFile, "Respuesta de getAllEquipos:\n" . print_r($equipos, true), FILE_APPEND);
+    
+        if (!is_array($equipos)) {
+            throw new Exception("La API devolvió una respuesta no válida.");
+        }
+    } catch (Exception $e) {
+        $equipos = [];
+        $error = $e->getMessage();
+        file_put_contents($logFile, "Error al obtener equipos: $error\n", FILE_APPEND);
+    }
+} else {
+    $equipos = $equipoService->getAllEquipos();
+}
 ?>
 
 <div class="max-w-6xl mx-auto space-y-8">
@@ -82,28 +68,21 @@ $teams = array_map(function ($team) {
 
     <!-- Teams Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="teamsGrid">
-        <?php foreach ($teams as $team): ?>
+        <?php foreach ($equipos as $team): echo $team;?>
+            
             <div class="bg-[#1E293B] border-[#1E293B] text-white rounded-lg overflow-hidden">
                 <div class="flex items-center justify-center p-6">
-                    <img src="<?= $team['logo'] ?>" alt="<?= $team['name'] ?> Logo" class="rounded-full">
+                    <img src="<?= $team['logo'] ?>" alt="<?= $team['nombreequipo'] ?> Logo" class="rounded-full">
                 </div>
                 <div class="p-6 space-y-4">
                     <div class="text-center">
-                        <h3 class="text-xl font-bold"><?= $team['name'] ?></h3>
-                        <p class="text-[#94A3B8]">Founded: <?= $team['founded'] ?></p>
+                        <h3 class="text-xl font-bold"><?= $team['nombreequipo'] ?></h3>
+                        <p class="text-[#94A3B8]">Founded: <?= $team['fechafundacion'] ?></p>
                     </div>
                     <div class="space-y-2">
                         <div class="flex justify-between">
                             <span class="text-[#94A3B8]">Captain:</span>
-                            <span><?= $team['captain'] ?></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-[#94A3B8]">Stadium:</span>
-                            <span><?= $team['stadium'] ?></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-[#94A3B8]">League:</span>
-                            <span><?= $team['league'] ?></span>
+                            <span><?= $team['representanteequipo'] ?></span>
                         </div>
                     </div>
                 </div>
